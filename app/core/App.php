@@ -4,7 +4,7 @@ class App{
 
     protected $controller = 'home';
 
-    protected $method = 'hello';
+    protected $method = 'loginPage';
 
     protected $params = [];
 
@@ -48,3 +48,4 @@ class App{
         }
     }
 }
+?>
