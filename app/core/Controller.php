@@ -9,6 +9,8 @@ class Controller
     }
 
     public function view($view, $data = []){
+
+        extract($data); // Extracts the array keys as variables
         require_once __DIR__ . '/../views/' . $view . '.php';
         
     }
