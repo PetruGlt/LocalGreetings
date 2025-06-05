@@ -1,0 +1,36 @@
+nav {
+            background-color: #333;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+        nav .logo {
+            font-family: 'Arial', sans-serif;
+            font-size: 32px;
+            font-weight: bold;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: inline-block;
+        }
+        nav .logo span {
+            color: #4CAF50; /* Accent color for the "IS" part */
+        }
+        nav a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        nav a:hover {
+            background-color: #575757;
+        }
+        .container {
+            padding-top: 60px; 
+        }
+        #map {
+            height: 500px; 
+        }

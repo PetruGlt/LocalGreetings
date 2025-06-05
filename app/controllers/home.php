@@ -9,6 +9,10 @@ class Home extends Controller
         $this->view('home/hello', ['name'=> $user->name]);
     }
     
+    public function index(){
+        $this->view('home/mainPage');
+    }
+    
     public function bla(){
         echo 'alaal';
     }

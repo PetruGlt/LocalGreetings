@@ -2,9 +2,9 @@
 
 class App{
 
-    protected $controller = 'home';
+    protected $controller = 'login';
 
-    protected $method = 'hello';
+    protected $method = 'index';
 
     protected $params = [];
 
@@ -48,3 +48,4 @@ class App{
         }
     }
 }
+?>
