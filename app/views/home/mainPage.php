@@ -1,3 +1,29 @@
+<?php
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "sportis"; 
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$sql = "SELECT id, osm_id, lat, lon, name, sport FROM sports_fields";
+$result = $conn->query($sql);
+
+
+$locations = [];
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        $locations[] = $row; 
+    }
+}
+
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,10 +32,9 @@
     <title>Sports Meetup - Find Courts</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="/LocalGreetings/public/css/mainStyle.css">
-    <!-- Optional: Link to external CSS for the navbar -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        /* Custom CSS for Navbar */
+
         nav {
             background-color: #333;
             padding: 10px 0;
@@ -29,7 +54,7 @@
             display: inline-block;
         }
         nav .logo span {
-            color: #4CAF50; /* Accent color for the "IS" part */
+            color: #4CAF50;
         }
         nav a {
             color: white;
@@ -50,7 +75,6 @@
 </head>
 <body>
 
-<!-- Navbar -->
 <nav>
     <div class="logo">
         Sport<span>IS</span>
@@ -78,12 +102,15 @@
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
     var map = L.map('map').setView([47.1585, 27.6014], 13); // Set default view (change coordinates to your city's center)
-
-    // Add OpenStreetMap tile layer
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
+    <?php foreach ($locations as $location): ?>
+        L.marker([<?php echo $location['lat']; ?>, <?php echo $location['lon']; ?>])
+            .addTo(map)
+            .bindPopup("<b>ID: <?php echo $location['id']; ?></b><br>Name: <?php echo $location['name']; ?><br>Sport: <?php echo $location['sport']; ?>");
+    <?php endforeach; ?>
 
 </script>
 
