@@ -34,7 +34,9 @@ $conn->close();
     <link rel="stylesheet" href="/LocalGreetings/public/css/mainStyle.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-
+        body {
+            background-color:rgba(255, 255, 255, 0.93);
+        }
         nav {
             background-color: #333;
             padding: 10px 0;
@@ -70,6 +72,9 @@ $conn->close();
         }
         #map {
             height: 500px; 
+            opacity: 0.9;
+            border-radius:20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
