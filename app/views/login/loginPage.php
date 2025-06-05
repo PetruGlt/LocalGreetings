@@ -26,7 +26,7 @@
                 <button type="submit">Conectare</button>
             </div>
             <div class="footer">
-                <p>Nu ai un cont? <a href="/signup">Inregistrare</a></p>
+                <p>Nu ai un cont? <a href="/LocalGreetings/public/login/register">Inregistrare</a></p>
             </div>
         </form>
     </div>

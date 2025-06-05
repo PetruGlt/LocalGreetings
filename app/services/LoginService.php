@@ -17,7 +17,7 @@ class LoginService {
         $user = $this->user->findByEmail($email);
         // echo $user ? "User found: " . $user['username'] . $user['email'] . "Pass:" . $user['password'] . "\n" : "No user found with that email.\n";
 
-        if ($user && $password == $user['password']) {
+        if ($user && password_verify($password, $user['password'])) {
             // echo "User authenticated successfully.\n";
             return $user;
             
