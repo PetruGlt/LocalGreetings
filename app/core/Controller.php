@@ -14,4 +14,8 @@ class Controller
         require_once __DIR__ . '/../views/' . $view . '.php';
         
     }
+
+    protected function isAuthenticated() {
+        return isset($_SESSION['user_id']);
+    }
 }

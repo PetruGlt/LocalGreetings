@@ -19,7 +19,7 @@ class Login extends Controller
 
             if ($user) {
                 
-                $_SESSION['user_id'] = $user['ID'];
+                $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['email'] = $user['email'];
                 

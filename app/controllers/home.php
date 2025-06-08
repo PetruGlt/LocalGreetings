@@ -10,7 +10,12 @@ class Home extends Controller
     }
     
     public function index(){
-        $this->view('home/mainPage');
+        if($this->isAuthenticated())
+            $this->view('home/mainPage');
+        else {
+            header('Location: ../login/loginPage');
+            exit;
+        }
     }
     
     public function bla(){
