@@ -49,7 +49,7 @@ class Login extends Controller
                 return;
             }
 
-            require_once __DIR__ . '/../services/registerUserService.php';
+            require_once __DIR__ . '/../services/RegisterUserService.php';
             $registerService = new RegisterUserService();
             $user = $registerService->register($username,$email,$password);
             

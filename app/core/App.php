@@ -1,5 +1,8 @@
 <?php
 
+require_once __DIR__ . '/Config.php';
+require_once __DIR__ . '/../services/DatabaseService.php';
+
 class App{
 
     protected $controller = 'login';
@@ -9,6 +12,9 @@ class App{
     protected $params = [];
 
     public function __construct(){
+
+        Config::load();
+        DatabaseService::load();
         //   print_r($this->parseUrl());
 
         $url = $this->parseUrl();
