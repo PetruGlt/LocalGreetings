@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SportIS - Registration</title>
-    <link rel="stylesheet" href="/LocalGreetings/public/css/loginStyle.css">
+    <link rel="stylesheet" href="<?php echo Config::get("APP_URL"); ?>/css/loginStyle.css">
 </head>
 <body>
     <div class="login-container">
@@ -13,7 +13,7 @@
         <p class="error-message" style="color: red;">
             <?php if (isset($errorMessage)) echo htmlspecialchars($errorMessage); ?>
         </p>
-        <form action="/LocalGreetings/public/login/createAccount" method="POST">
+        <form action="<?php echo Config::get("APP_URL"); ?>/login/createAccount" method="POST">
             <div class="input-group">
                 <label for="username">Nume de utilizator</label>
                 <input type="text" id="username" name="username" placeholder="Introduceti numele de utilizator dorit" required>
@@ -34,7 +34,7 @@
                 <button type="submit">Inregistrare</button>
             </div>
             <div class="footer">
-                <p>Ai deja un cont? <a href="/LocalGreetings/public/login/index">Conectare</a></p>
+                <p>Ai deja un cont? <a href="<?php echo Config::get("APP_URL"); ?>/login/index">Conectare</a></p>
             </div>
         </form>
     </div>

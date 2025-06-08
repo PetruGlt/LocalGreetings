@@ -31,7 +31,7 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sports Meetup - Find Courts</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="/LocalGreetings/public/css/mainStyle.css">
+    <link rel="stylesheet" href="<?php echo Config::get("APP_URL"); ?>/css/mainStyle.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
 
