@@ -19,7 +19,7 @@ class Login extends Controller
 
             if ($user) {
                 
-                $_SESSION['user_id'] = $user['ID'];
+                $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['email'] = $user['email'];
                 
@@ -49,7 +49,7 @@ class Login extends Controller
                 return;
             }
 
-            require_once __DIR__ . '/../services/registerUserService.php';
+            require_once __DIR__ . '/../services/RegisterUserService.php';
             $registerService = new RegisterUserService();
             $user = $registerService->register($username,$email,$password);
             
