@@ -48,6 +48,7 @@ if (!empty($data['elements'])) {
           
         $name = isset($element['tags']['name']) ? $element['tags']['name'] : null;
         $sport = isset($element['tags']['sport']) ? $element['tags']['sport'] : null;
+        $surface = isset($element['tags']['surface']) ? $element['tags']['surface'] : null;
         
         if ($type === 'node' && isset($element['lat']) && isset($element['lon'])) {
             $lat = $element['lat'];
@@ -63,12 +64,13 @@ if (!empty($data['elements'])) {
         }
 
       
-        $stmt = $conn->prepare("INSERT INTO sports_fields (osm_id, type, lat, lon, name, sport) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("issdss", $osm_id, $type, $lat, $lon, $name, $sport); 
+        $stmt = $conn->prepare("INSERT INTO sports_fields (osm_id, type, lat, lon, name, sport, surface) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("issdsss", $osm_id, $type, $lat, $lon, $name, $sport, $surface); 
 
         if (!$stmt->execute()) {
             echo "Error: " . $stmt->error;
         }
+    }
     }
 } else {
     echo "No data found from Overpass API.";
