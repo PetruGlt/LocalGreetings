@@ -62,7 +62,9 @@ if (isset($_SESSION['errorMessage'])) {
         <a href="#about">Events</a>
         <a href="#contact">Social</a>
         <a href="#login">Profile</a>
-        <a href="#logout">Logout</a>
+        <form action="../home/logout" method="post" style="display: inline;">
+            <button type="submit" style="background: none; border: none; color: inherit; cursor: pointer;">Logout</button>
+        </form>
     </div>
 </nav>
 

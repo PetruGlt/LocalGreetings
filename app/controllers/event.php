@@ -9,6 +9,7 @@ class Event extends Controller
 
             require_once __DIR__ . '/../services/DatabaseService.php';
             DatabaseService::load();
+            require_once __DIR__ . '/../models/EventModel.php';
 
             $name = $_POST['name'];
             $userId = $_SESSION['user_id'];
@@ -17,6 +18,9 @@ class Event extends Controller
             $eventTimeStart = $_POST['event_time_start'];
             $eventTimeEnd = $_POST['event_time_end'];
             $description = $_POST['description'];
+            $rawTags = $_POST['tags'] ?? '';
+            $tagsArray = array_filter(array_map('trim', explode(',', $rawTags)));
+
 
             $start = new DateTime($eventTimeStart);
             $end = new DateTime($eventTimeEnd);
@@ -31,18 +35,31 @@ class Event extends Controller
                 exit;
             }
 
-
-            $sql = "INSERT INTO events (name, creator_id, field_id, max_participants, event_time_start, event_time_end, description)
-                VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-            $success = DatabaseService::runDML($sql, "siiisss", $name, $userId, $fieldId, $maxParticipants, $eventTimeStart, $eventTimeEnd, $description);
+            $success = EventModel::registerEvent($name, $userId, $fieldId, $maxParticipants, $eventTimeStart, $eventTimeEnd, $description);
 
             if ($success) {
+                 $eventID = DatabaseService::getLastInsertId();
+
+                foreach($tagsArray as $tag){
+                    $tagCheck = EventModel::findTagByName($tag);
+                    if(!empty($tagCheck)) {
+                        $tagID = $tagCheck['id'];
+                    } else {
+                        EventModel::insertTagInTags($tag);
+                        $tagID = DatabaseService::getLastInsertId();
+                    }
+                    $exists = DatabaseService::runSelect("SELECT * FROM event_tags WHERE event_id = $eventID AND tag_id = $tagID");
+                    if(empty($exists)) {
+                        EventModel::insertEventTag($eventID, $tagID);
+                    }
+                }
+                
                 header("Location: ../home/mainPage"); 
                 exit;
             } else {
                 echo "Eroare la salvarea evenimentului!";
             }
+
         }
     }
 }

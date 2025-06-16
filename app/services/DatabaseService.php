@@ -50,4 +50,9 @@ class DatabaseService {
             return false;
         }
     }
+
+    public static function getLastInsertId() {
+    return self::$conn->insert_id;
+}
+
 }
