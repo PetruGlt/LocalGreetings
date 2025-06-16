@@ -8,7 +8,6 @@ class Event extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             require_once __DIR__ . '/../services/DatabaseService.php';
-            DatabaseService::load();
             require_once __DIR__ . '/../models/EventModel.php';
 
             $name = $_POST['name'];
