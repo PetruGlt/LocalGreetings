@@ -9,6 +9,7 @@ class Home extends Controller
         $this->view('home/hello', ['name'=> $user->name]);
     }
     
+
     public function index(){
         if($this->isAuthenticated())
             $this->view('home/mainPage');
@@ -18,7 +19,11 @@ class Home extends Controller
         }
     }
     
-    public function bla(){
-        echo 'alaal';
+    public function logout(){
+        session_unset();
+        session_destroy();
+        header('Location: ../login/loginPage');
+        exit;
     }
+
 }

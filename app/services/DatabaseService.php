@@ -28,6 +28,18 @@ class DatabaseService {
         return [];
     }
 
+    public static function runLocations($sql) {
+    $result = self::$conn->query($sql);
+    $data = [];
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+    }
+    return $data;
+}
+
+
     public static function runDML($stmt, $types, ...$vars) {
         $stmt = self::$conn->prepare($stmt);
         $stmt->bind_param($types, ...$vars);
@@ -38,4 +50,9 @@ class DatabaseService {
             return false;
         }
     }
+
+    public static function getLastInsertId() {
+    return self::$conn->insert_id;
+}
+
 }
