@@ -24,10 +24,7 @@ if (isset($_SESSION['errorMessage'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sports Meetup - Find Courts</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="<?php echo Config::get("APP_URL"); ?>/css/mainStyle.css">
-    <link rel="stylesheet" href="<?php echo Config::get("APP_URL"); ?>/css/modal.css">
-    <link rel="stylesheet" href="<?php echo Config::get("APP_URL"); ?>/css/errorStyles.css">
+    <link rel="stylesheet" href="<?php echo Config::get("APP_URL"); ?>/css/MainPage.css">
     <style>
         .error-notification {
             background-color: #f44336;
@@ -58,12 +55,13 @@ if (isset($_SESSION['errorMessage'])) {
         Sport<span>IS</span>
     </div>
     <div>
-        <a href="#home">Home</a>
-        <a href="#about">Events</a>
-        <a href="#contact">Social</a>
-        <a href="#login">Profile</a>
+        <a href="../home/mainPage">Home</a>
+        <a href="#events">Events</a>
+        <a href="#social">Social</a>
+        <a href="#profile">Profile</a>
+        <a href="../home/news">News</a>
         <form action="../home/logout" method="post" style="display: inline;">
-            <button type="submit" style="background: none; border: none; color: inherit; cursor: pointer;">Logout</button>
+            <button id="logout" type="submit" >Logout</button>
         </form>
     </div>
 </nav>
@@ -91,18 +89,25 @@ if (isset($_SESSION['errorMessage'])) {
         }
 
         // Initializare mapa
-        var map = L.map('map').setView([47.1585, 27.6014], 13); // Set default view (change coordinates to your city's center)
+        var map = L.map('map').setView([47.1585, 27.6014], 13); // Iasi city center coord
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
+        map.zoomControl.remove(); // Elimina + si -
+
+        // ascunde watermark
+        document.querySelector('.leaflet-control-attribution')?.remove();
+
         function openEventModal(fieldId) {
             document.getElementById('field_id').value = fieldId; // setează hidden field
-            document.getElementById('eventModal').style.display = 'block';
+            document.getElementById('eventModal').style.display = 'block'; 
+            document.body.classList.add('modal-open'); // blocare scroll fundal
         }
 
         document.getElementById('closeModal').onclick = function() {
             document.getElementById('eventModal').style.display = 'none';
+            document.body.classList.remove('modal-open');
         };
 
         window.onclick = function(event) {
@@ -131,9 +136,11 @@ if (isset($_SESSION['errorMessage'])) {
     </script>
     <div class="upcoming-events">
         <h2>Evenimente: </h2>
-        <ul>
-    
-        </ul>
+        <!-- To be changed - not best practice -->
+            <?php 
+                require_once __DIR__ . '/../../controllers/rss.php';
+                rss::Reader("http://localhost/LocalGreetings/public/rss/feed");
+            ?>
     </div>
 </div>
 
