@@ -26,4 +26,20 @@ class Home extends Controller
         exit;
     }
 
+    public function news(){
+        
+        $newsModel = $this->model('News');
+
+        $sursa1 = $newsModel->fetchNews('https://www.digi24.ro/rss');
+        $sursa2 = $newsModel->fetchNews('https://rss.app/feeds/XUK3Z066WY4rYJ8k.xml');
+        $sursa3 = $newsModel->fetchNews('https://observatornews.ro/rss');
+    
+        $this->view('home/news', [
+            'Digi24'=>$sursa1,
+            'ProTV'=>$sursa2, 
+            'Observator'=>$sursa3
+        ]);
+    
+    }
+
 }
