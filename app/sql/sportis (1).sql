@@ -197,7 +197,7 @@ ALTER TABLE `users`
 -- Constraints for table `events`
 --
 ALTER TABLE `events`
-  ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`creator_id`) REFERENCES `users` (`ID`),
+  ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`creator_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `events_ibfk_2` FOREIGN KEY (`field_id`) REFERENCES `sports_fields` (`id`);
 
 --
@@ -205,7 +205,7 @@ ALTER TABLE `events`
 --
 ALTER TABLE `event_participants`
   ADD CONSTRAINT `event_participants_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `event_participants_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`ID`) ON DELETE CASCADE;
+  ADD CONSTRAINT `event_participants_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `event_tags`

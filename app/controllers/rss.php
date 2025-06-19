@@ -30,7 +30,7 @@ class rss extends Controller {
         header("Content-Type: application/rss+xml; charset=UTF-8");
         
         $sql = "SELECT id, name, field_id, event_time_start, event_time_end, description FROM events";
-        $events = DatabaseService::runLocations($sql);
+        $events = DatabaseService::runSelect($sql);
 
        
         echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";

@@ -1,14 +1,13 @@
 <?php
 
+require_once __DIR__ . '/../models/EventModel.php';
+
 class Event extends Controller
 {
     public function addEvent()
     {
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            require_once __DIR__ . '/../models/EventModel.php';
-
             $name = $_POST['name'];
             $userId = $_SESSION['user_id'];
             $fieldId = $_POST['field_id'];
@@ -57,6 +56,16 @@ class Event extends Controller
             } else {
                 echo "Eroare la salvarea evenimentului!";
             }
+
+        }
+    }
+
+    public function getEvents() {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+
+            $events = EventModel::getEvents([]);
+            
+            echo json_encode($events ?? []);
 
         }
     }
