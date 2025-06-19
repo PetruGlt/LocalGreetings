@@ -1,8 +1,8 @@
 <?php
-DatabaseService::load();
+// DatabaseService::load();
 
 $sql = "SELECT id, osm_id, lat, lon, name, sport, surface FROM sports_fields";
-$locations = DatabaseService::runLocations($sql);
+$locations = DatabaseService::runSelect($sql);
 
 
 if (session_status() == PHP_SESSION_NONE) {
@@ -39,8 +39,8 @@ if (isset($_SESSION['errorMessage'])) {
             transition: opacity 0.3s ease;
         }
     </style>
-    <script src="<?php echo Config::get("APP_URL"); ?>/js/utils/notifications.js" defer></script>
-    
+    <script src="<?php echo Config::get("APP_URL"); ?>/js/notifications.js" defer></script>
+    <script src="<?php echo Config::get("APP_URL"); ?>/js/eventList.js" defer></script>
 
 </head>
 <!-- MODAL FORMULAR addEvent -->
@@ -136,11 +136,9 @@ if (isset($_SESSION['errorMessage'])) {
     </script>
     <div class="upcoming-events">
         <h2>Evenimente: </h2>
-        <!-- To be changed - not best practice -->
-            <?php 
-                require_once __DIR__ . '/../../controllers/rss.php';
-                rss::Reader("http://localhost/LocalGreetings/public/rss/feed");
-            ?>
+        <div>
+            <ul id="event-list"></ul>
+        </div>
     </div>
 </div>
 

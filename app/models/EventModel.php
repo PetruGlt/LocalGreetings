@@ -22,9 +22,7 @@ class EventModel
     public function findEventById($eventId)
     {
         $eventData = DatabaseService::runSelect(
-            "SELECT * FROM events WHERE id = ? LIMIT 1",
-            "i",
-            $eventId
+            "SELECT * FROM events WHERE id = " . $eventId . " LIMIT 1"
         );
         return $eventData;
     }
@@ -32,9 +30,7 @@ class EventModel
     public function findEventsByFieldId($fieldId)
     {
         $eventsData = DatabaseService::runSelect(
-            "SELECT * FROM events WHERE field_id = ?",
-            "i",
-            $fieldId
+            "SELECT * FROM events WHERE field_id = " . $fieldId
         );
         return $eventsData;
     }
@@ -54,6 +50,13 @@ class EventModel
             $eventID,
             $tagID
         );
+    }
+
+    public static function getEvents($filters) {
+        $eventsData = DatabaseService::runSelect(
+            "SELECT * FROM events"
+        );
+        return $eventsData;
     }
     
 }

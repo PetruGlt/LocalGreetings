@@ -4,9 +4,10 @@ class User
 {   
     public function findByEmail($email)
     {
-        return DatabaseService::runSelect(
+        $user = DatabaseService::runSelect(
             "SELECT * FROM users WHERE email = '" . $email . "' LIMIT 1"
         );
+        return $user != null ? $user[0] : null;
     }
 
     public function findByUsername($username)
@@ -14,7 +15,7 @@ class User
         $users = DatabaseService::runSelect(
             "SELECT * FROM users WHERE username = '" . $username . "' LIMIT 1"
         );
-        return count($users) != 0 ? $users : null;
+        return $users != null ? $users[0] : null;
     }
 
     public function registerUser($username, $email, $password)

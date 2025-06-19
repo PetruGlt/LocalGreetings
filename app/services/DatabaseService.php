@@ -22,23 +22,14 @@ class DatabaseService {
     }
 
     public static function runSelect($sql) {
+        $rows = null;
         $result = self::$conn->query($sql);
-        if ($result->num_rows > 0)
-            return $result->fetch_assoc();
-        return [];
-    }
-
-    public static function runLocations($sql) {
-    $result = self::$conn->query($sql);
-    $data = [];
-    if ($result && $result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $data[] = $row;
+        if ($result->num_rows > 0) {
+            $rows = $result->fetch_all(MYSQLI_ASSOC);
+            $result->free_result();
         }
+        return $rows;
     }
-    return $data;
-}
-
 
     public static function runDML($stmt, $types, ...$vars) {
         $stmt = self::$conn->prepare($stmt);
@@ -52,7 +43,7 @@ class DatabaseService {
     }
 
     public static function getLastInsertId() {
-    return self::$conn->insert_id;
-}
+        return self::$conn->insert_id;
+    }
 
 }
