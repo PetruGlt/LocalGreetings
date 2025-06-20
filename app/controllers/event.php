@@ -20,7 +20,9 @@ class Event extends Controller
             "SELECT et.event_id, t.name 
              FROM event_tags et
              JOIN tags t ON et.tag_id = t.id
-             WHERE et.event_id IN (SELECT id FROM events WHERE field_id = " . (int)$fieldId . ") "
+             WHERE et.event_id IN (SELECT id FROM events WHERE field_id = ?)", 
+             
+             (int)$fieldId
             ); 
         
         $eventTags = [];
@@ -33,7 +35,7 @@ class Event extends Controller
         }
         
         for( $i = 0; $i < count($events); $i++ ) {
-            $creator = DatabaseService::runSelect("SELECT username FROM users WHERE id = " . $events[$i]['creator_id'] . " LIMIT 1");
+            $creator = DatabaseService::runSelect("SELECT username FROM users WHERE id = ? LIMIT 1", $events[$i]['creator_id']);
             $events[$i]['creator_username'] = $creator[0]['username'] ?? 'Necunoscut';
         }
 
@@ -55,7 +57,7 @@ class Event extends Controller
             "SELECT et.event_id, t.name 
              FROM event_tags et
              JOIN tags t ON et.tag_id = t.id
-             WHERE et.event_id = " . (int)$eventId
+             WHERE et.event_id = ?", (int)$eventId
             ); 
         
         $eventTags = [];
@@ -68,7 +70,7 @@ class Event extends Controller
             }
         }
 
-        $creator = DatabaseService::runSelect("SELECT username FROM users WHERE id = " . $event[0]['creator_id'] . " LIMIT 1");
+        $creator = DatabaseService::runSelect("SELECT username FROM users WHERE id = ? LIMIT 1", $event[0]['creator_id']);
         $event[0]['creator_username'] = $creator[0]['username'] ?? 'Necunoscut';
 
         $this->view("event/view", ["events" => $event, "fieldId" => $fieldId, "eventTags" => $eventTags, "title" => ""]);
@@ -115,7 +117,7 @@ class Event extends Controller
                         EventModel::insertTagInTags($tag);
                         $tagID = DatabaseService::getLastInsertId();
                     }
-                    $exists = DatabaseService::runSelect("SELECT * FROM event_tags WHERE event_id = $eventID AND tag_id = $tagID");
+                    $exists = DatabaseService::runSelect("SELECT * FROM event_tags WHERE event_id = ? AND tag_id = ?", $eventID, $tagID);
                     if(empty($exists)) {
                         EventModel::insertEventTag($eventID, $tagID);
                     }
@@ -133,7 +135,19 @@ class Event extends Controller
     public function getEvents() {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
-            $events = EventModel::getEvents([]);
+            $filters = [];
+            if(isset($_GET['name']))
+                $filters['name'] = $_GET['name'];
+            if(isset($_GET['event_time_start']))
+                $filters['event_time_start'] = new DateTime($_GET['event_time_start']);
+            if(isset($_GET['event_time_end']))
+                $filters['event_time_end'] = new DateTime($_GET['event_time_end']);
+            if(isset($_GET['max_participants']))
+                $filters['max_participants'] = $_GET['max_participants'];
+            if(isset($_GET['tags']))
+                $filters['tags'] = $_GET['tags'];
+
+            $events = EventModel::getEvents($filters);
             
             echo json_encode($events ?? []);
 

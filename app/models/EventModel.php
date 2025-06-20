@@ -6,7 +6,7 @@ class EventModel
     public static function findTagByName($name)
     {
         $tagData = DatabaseService::runSelect(
-            "SELECT id FROM tags WHERE name = '" . $name . "' LIMIT 1"
+            "SELECT id FROM tags WHERE name = ? LIMIT 1", $name
         );
         return $tagData;
     }
@@ -22,7 +22,7 @@ class EventModel
     public static function findEventById($eventId)
     {
         $eventData = DatabaseService::runSelect(
-            "SELECT * FROM events WHERE id = " . $eventId . " LIMIT 1"
+            "SELECT * FROM events WHERE id = ? LIMIT 1", $eventId
         );
         return $eventData;
     }
@@ -30,7 +30,7 @@ class EventModel
     public static function findEventsByFieldId($fieldId)
     {
         $eventsData = DatabaseService::runSelect(
-            "SELECT * FROM events WHERE field_id = " . $fieldId
+            "SELECT * FROM events WHERE field_id = ?", $fieldId
         );
         return $eventsData;
     }
@@ -53,9 +53,47 @@ class EventModel
     }
 
     public static function getEvents($filters) {
-        $eventsData = DatabaseService::runSelect(
-            "SELECT * FROM events"
-        );
+
+        $queryBuilder = "SELECT e.*, GROUP_CONCAT(CONCAT('#', t.name)) AS tags, sf.lat, sf.lon FROM events AS e
+            INNER JOIN sports_fields AS sf ON sf.id = e.field_id
+            LEFT JOIN event_tags AS et ON et.event_id = e.id
+            LEFT JOIN tags AS t ON t.id = et.tag_id";
+        
+        $bindParams = [];
+
+        if(!!$filters) {
+            $queryBuilder .= " WHERE";
+            $conjunction = "";
+            if(isset($filters['name'])) {
+                $conjunction .= "AND e.name LIKE ? ";
+                $bindParams[] = '%' . $filters['name'] . '%';
+            }
+            if(isset($filters['tags'])) {
+                $conjunction .= "AND t.id IN (";
+                foreach($filters['tags'] as $tag) {
+                    $conjunction .= "?,";
+                    $bindParams[] = $tag;
+                }
+                $conjunction = substr($conjunction, 0, -1) . ") ";
+            }
+            if(isset($filters['event_time_start'])) {
+                $conjunction .= "AND e.event_time_start >= ? ";
+                $bindParams[] = $filters['event_time_start']->getTimestamp();
+            }
+            if(isset($filters['event_time_end'])) {
+                $conjunction .= "AND e.event_time_end <= ? ";
+                $bindParams[] = $filters['event_time_end']->getTimestamp();
+            }
+            if(isset($filters['max_participants'])) {
+                $conjunction .= "AND e.max_participants <= ? ";
+                $bindParams[] = $filters['max_participants'];
+            }
+            $queryBuilder .= substr_replace($conjunction, "", 0, 3);
+        }
+
+        $queryBuilder .= " GROUP BY e.id";
+
+        $eventsData = DatabaseService::runSelect($queryBuilder, ...$bindParams);
         return $eventsData;
     }
     

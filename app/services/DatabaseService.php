@@ -21,9 +21,9 @@ class DatabaseService {
         self::$loaded = true;
     }
 
-    public static function runSelect($sql) {
+    public static function runSelect($sql, ...$vars) {
         $rows = null;
-        $result = self::$conn->query($sql);
+        $result = self::$conn->execute_query($sql, $vars);
         if ($result->num_rows > 0) {
             $rows = $result->fetch_all(MYSQLI_ASSOC);
             $result->free_result();
