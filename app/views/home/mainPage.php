@@ -116,33 +116,64 @@ if (isset($_SESSION['errorMessage'])) {
             }
         };
 
+        var markerMap = new Map()
+        var marker
 
+        var locations = <?= json_encode($locations) ?>
         // Adaugarea markerelor pe harta
-        <?php foreach ($locations as $location): ?>
-            L.marker([<?= $location['lat']; ?>, <?= $location['lon']; ?>])
+        locations.forEach((location) => {
+            marker = L.marker([Number(location.lat), Number(location.lon)])
                 .addTo(map)
                 .bindPopup(`
-                    <b>ID: <?= $location['id']; ?></b>
-                    <?php if($location['name']) echo "<br>Name: ". $location['name']; ?>
-                    <?php if($location['sport']) echo "<br>Sport: ". $location['sport']; ?>
-                    <?php if($location['surface']) echo "<br>Surface: " . $location['surface']; ?>
+                    <b>ID: ${location.id}</b>
+                    ${!!location.name ? "<br>Name: " + location.name : ""}
+                    ${!!location.sport ? "<br>Name: " + location.sport : ""}
+                    ${!!location.surface ? "<br>Name: " + location.surface : ""}
                     <br><br>
-                    <?php ?> 
-                    <button onclick="window.location.href='/LocalGreetings/public/event/viewField/<?= $location['id'] ?>'"
+                    <button onclick="window.location.href='/LocalGreetings/public/event/viewField/${location.id}'"
                         style="border-radius: 10px; opacity: 80%; background-color:rgb(46, 206, 218); color: white;"> Vizualizează Evenimente </button>
-                    <button style="border-radius: 10px; opacity: 80%; background-color:rgb(64, 172, 67); color: white;" onclick="openEventModal(<?= $location['id']; ?>)">Adauga Eveniment</button>
+                    <button style="border-radius: 10px; opacity: 80%; background-color:rgb(64, 172, 67); color: white;" onclick="openEventModal(${location.id})">Adauga Eveniment</button>
                 `);
-        <?php endforeach; ?>
+            markerMap.set(Number(location.id), marker)
+        })
     </script>
     <div class="upcoming-events">
         <h2>Evenimente: </h2>
         <div>
+            <div class="filter-header">
+                <form onsubmit="event.preventDefault(); getEvents(this)">
+                    <label>Nume:</label>
+                    <input type="text" name="name">
+
+                    <label>Tag-uri</label>
+                    <select name="tags[]" multiple>
+                        <option value="1">Greeting</option>
+                        <option value="2">Tenis</option>
+                        <option value="3">Sport</option>
+                    </select>
+
+                    <label>De la:</label>
+                    <input type="datetime-local" name="event_time_start">
+
+                    <label>Pana la:</label>
+                    <input type="datetime-local" name="event_time_end">
+
+                    <label>Max. part.:</label>
+                    <input type="number" name="max_participants" min="2">
+                            
+                    <input type="submit" value="Filtreaza">
+                </form>
+            </div>
+            <div class="event-header">
+                <h2>Name</h2>
+                <h2>Max. participants</h2>
+                <h2>Time</h2>
+                <h2>Tags</h2>
+                <h2>Actions</h2>
+            </div>
             <ul id="event-list"></ul>
         </div>
     </div>
 </div>
-
-
-
 </body>
 </html>
