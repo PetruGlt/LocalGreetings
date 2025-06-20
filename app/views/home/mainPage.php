@@ -24,7 +24,7 @@ if (isset($_SESSION['errorMessage'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sports Meetup - Find Courts</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="<?php echo Config::get("APP_URL"); ?>/css/MainPage.css">
+    <link rel="stylesheet" href="<?= Config::get("APP_URL"); ?>/css/MainPage.css">
     <style>
         .error-notification {
             background-color: #f44336;
@@ -39,8 +39,8 @@ if (isset($_SESSION['errorMessage'])) {
             transition: opacity 0.3s ease;
         }
     </style>
-    <script src="<?php echo Config::get("APP_URL"); ?>/js/notifications.js" defer></script>
-    <script src="<?php echo Config::get("APP_URL"); ?>/js/eventList.js" defer></script>
+    <script src="<?= Config::get("APP_URL"); ?>/js/notifications.js" defer></script>
+    <script src="<?= Config::get("APP_URL"); ?>/js/eventList.js" defer></script>
 
 </head>
 <!-- MODAL FORMULAR addEvent -->
@@ -55,19 +55,19 @@ if (isset($_SESSION['errorMessage'])) {
         Sport<span>IS</span>
     </div>
     <div>
-        <a href="../home/mainPage">Home</a>
-        <a href="#events">Events</a>
+        <a href="../home/mainPage">Acasa</a>
+        <a href="#event-list">Evenimente</a>
         <a href="#social">Social</a>
-        <a href="#profile">Profile</a>
-        <a href="../home/news">News</a>
+        <a href="#profile">Profil</a>
+        <a href="../home/news">Stiri</a>
         <form action="../home/logout" method="post" style="display: inline;">
-            <button id="logout" type="submit" >Logout</button>
+            <button id="logout" type="submit" >Deconectare</button>
         </form>
     </div>
 </nav>
 
 <div class="container">
-    <h1>Find Sports Courts in Your Area</h1>
+    <h1>Terenurile de sport disponibile</h1>
     <div id="map"></div>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
@@ -119,18 +119,18 @@ if (isset($_SESSION['errorMessage'])) {
 
         // Adaugarea markerelor pe harta
         <?php foreach ($locations as $location): ?>
-            L.marker([<?php echo $location['lat']; ?>, <?php echo $location['lon']; ?>])
+            L.marker([<?= $location['lat']; ?>, <?= $location['lon']; ?>])
                 .addTo(map)
                 .bindPopup(`
-                    <b>ID: <?php echo $location['id']; ?></b>
+                    <b>ID: <?= $location['id']; ?></b>
                     <?php if($location['name']) echo "<br>Name: ". $location['name']; ?>
                     <?php if($location['sport']) echo "<br>Sport: ". $location['sport']; ?>
                     <?php if($location['surface']) echo "<br>Surface: " . $location['surface']; ?>
                     <br><br>
-                    <?php ?> // verifica daca exista evenimente pentru acest teren
-                    <button style="border-radius: 10px; opacity: 80%; background-color:rgb(46, 206, 218); color: white;">Vizualizeaza Evenimente</button>
-                    <br>
-                    <button style="border-radius: 10px; opacity: 80%; background-color:rgb(64, 172, 67); color: white;" onclick="openEventModal(<?php echo $location['id']; ?>)">Adauga Eveniment</button>
+                    <?php ?> 
+                    <button onclick="window.location.href='/LocalGreetings/public/event/viewField/<?= $location['id'] ?>'"
+                        style="border-radius: 10px; opacity: 80%; background-color:rgb(46, 206, 218); color: white;"> Vizualizează Evenimente </button>
+                    <button style="border-radius: 10px; opacity: 80%; background-color:rgb(64, 172, 67); color: white;" onclick="openEventModal(<?= $location['id']; ?>)">Adauga Eveniment</button>
                 `);
         <?php endforeach; ?>
     </script>

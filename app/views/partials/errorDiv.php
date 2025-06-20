@@ -3,7 +3,7 @@
 <?php if (!empty($errorMessage)): ?>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        showError(<?php echo json_encode($errorMessage); ?>);
+        showError(<?= json_encode($errorMessage); ?>);
     });
 </script>
 <?php endif; ?>

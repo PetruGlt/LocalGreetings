@@ -4,6 +4,76 @@ require_once __DIR__ . '/../models/EventModel.php';
 
 class Event extends Controller
 {
+
+    public function viewField($fieldId) {
+        require_once __DIR__ . '/../services/DatabaseService.php';
+
+        $events = EventModel::findEventsByFieldId($fieldId);
+        if (empty($events)) {
+            $_SESSION['errorMessage'] = "Nu exista evenimente pentru acest teren.";
+            header("Location: /LocalGreetings/public/home/mainPage");
+            
+            exit;
+        }
+
+        $tags = DatabaseService::runSelect(
+            "SELECT et.event_id, t.name 
+             FROM event_tags et
+             JOIN tags t ON et.tag_id = t.id
+             WHERE et.event_id IN (SELECT id FROM events WHERE field_id = " . (int)$fieldId . ") "
+            ); 
+        
+        $eventTags = [];
+        if(!empty($tags)){
+            foreach ($tags as $tag) {
+                if($tag != null)
+                    $eventTags[$tag['event_id']][] = $tag['name'];
+                else continue;
+            }
+        }
+        
+        for( $i = 0; $i < count($events); $i++ ) {
+            $creator = DatabaseService::runSelect("SELECT username FROM users WHERE id = " . $events[$i]['creator_id'] . " LIMIT 1");
+            $events[$i]['creator_username'] = $creator[0]['username'] ?? 'Necunoscut';
+        }
+
+        $this->view("event/view", ["events" => $events, "fieldId" => $fieldId, "eventTags" => $eventTags]);
+    }
+
+    public function viewEvent($eventId) {
+        require_once __DIR__ . '/../services/DatabaseService.php';
+        $event = EventModel::findEventById($eventId);
+        
+        if (empty($event)) {
+            $_SESSION['errorMessage'] = "Evenimentul nu a fost găsit.";
+            header("Location: /LocalGreetings/public/home/mainPage");
+            exit;
+        }
+
+        $fieldId = $event[0]['field_id'];
+        $tags = DatabaseService::runSelect(
+            "SELECT et.event_id, t.name 
+             FROM event_tags et
+             JOIN tags t ON et.tag_id = t.id
+             WHERE et.event_id = " . (int)$eventId
+            ); 
+        
+        $eventTags = [];
+
+        if(!empty($tags)){
+            foreach ($tags as $tag) {
+                if($tag != null)
+                    $eventTags[$tag['event_id']][] = $tag['name'];
+                else continue;
+            }
+        }
+
+        $creator = DatabaseService::runSelect("SELECT username FROM users WHERE id = " . $event[0]['creator_id'] . " LIMIT 1");
+        $event[0]['creator_username'] = $creator[0]['username'] ?? 'Necunoscut';
+
+        $this->view("event/view", ["events" => $event, "fieldId" => $fieldId, "eventTags" => $eventTags]);
+    }
+
     public function addEvent()
     {
         

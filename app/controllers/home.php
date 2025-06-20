@@ -42,4 +42,8 @@ class Home extends Controller
     
     }
 
+    public function profile(){
+        this->view('profile/view');
+    }
+
 }
