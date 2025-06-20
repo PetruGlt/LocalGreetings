@@ -1,5 +1,5 @@
 <?php
-// MODEL: Handles data access
+
 class EventModel
 {   
 
@@ -19,7 +19,7 @@ class EventModel
         return $success;
     }
     
-    public function findEventById($eventId)
+    public static function findEventById($eventId)
     {
         $eventData = DatabaseService::runSelect(
             "SELECT * FROM events WHERE id = " . $eventId . " LIMIT 1"
@@ -27,7 +27,7 @@ class EventModel
         return $eventData;
     }
 
-    public function findEventsByFieldId($fieldId)
+    public static function findEventsByFieldId($fieldId)
     {
         $eventsData = DatabaseService::runSelect(
             "SELECT * FROM events WHERE field_id = " . $fieldId

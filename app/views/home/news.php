@@ -11,19 +11,19 @@
     
 <nav>
     <div class="logo">
-        Sport<span>IS</span>
-    </div>
-    <div>
-        <a href="../home/mainPage">Home</a>
-        <a href="#about">Events</a>
-        <a href="#contact">Social</a>
-        <a href="#login">Profile</a>
-        <a href="../home/news">News</a>
-        <form action="../home/logout" method="post" style="display: inline;">
-            <button id="logout" type="submit" >Logout</button>
-        </form>
-    </div>
-</nav>
+            Sport<span>IS</span>
+        </div>
+        <div>
+            <a href="/LocalGreetings/public/home/mainPage">Acasa</a>
+            <a href="#events">Evenimente</a>
+            <a href="#social">Social</a>
+            <a href="#profile">Profil</a>
+            <a href="../home/news">Stiri</a>
+            <form action="../home/logout" method="post" style="display: inline;">
+                <button id="logout" type="submit" >Deconectare</button>
+            </form>
+        </div>
+    </nav>
 
     <div class="container">
       <?php foreach ($data as $source => $articles): ?>
