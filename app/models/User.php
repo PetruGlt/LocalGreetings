@@ -21,13 +21,16 @@ class User
     public function registerUser($username, $email, $password)
     {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        DatabaseService::runDML(
-            "INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
-            "sss",
+        $now = date('Y-m-d H:i:s');
+        $success = DatabaseService::runDML(
+            "INSERT INTO users (username, email, password, registration_date) VALUES (?, ?, ?, ?)",
+            "ssss",
             $username,
             $email,
-            $hashedPassword
+            $hashedPassword,
+            $now
         );
+        return $success;
     }
     
 }

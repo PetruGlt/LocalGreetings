@@ -26,7 +26,10 @@ $overpassApiUrl = "https://overpass-api.de/api/interpreter";
 $bodyData = "
 [out:json][timeout:25];
 area[\"name\"=\"Iași\"]->.searchArea; 
-nwr[\"leisure\"=\"pitch\"](area.searchArea);
+(
+    nwr[\"leisure\"=\"pitch\"](area.searchArea);
+    nwr[\"leisure\"=\"park\"](area.searchArea);
+);
 out tags geom;
 ";
 

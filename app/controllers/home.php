@@ -42,8 +42,13 @@ class Home extends Controller
     
     }
 
-    public function profile(){
-        this->view('profile/view');
+    public function viewProfile($id = null) {
+        $userData = DatabaseService::runSelect(
+            "SELECT * FROM users WHERE id = " . $id . " LIMIT 1"
+        );
+        // echo $userData[0]['username'];
+        $this->view('home/profilePage', ['user' => $userData[0]]);
+
     }
 
 }

@@ -37,7 +37,7 @@ class Event extends Controller
             $events[$i]['creator_username'] = $creator[0]['username'] ?? 'Necunoscut';
         }
 
-        $this->view("event/view", ["events" => $events, "fieldId" => $fieldId, "eventTags" => $eventTags]);
+        $this->view("event/view", ["events" => $events, "fieldId" => $fieldId, "eventTags" => $eventTags, "title" => "Lista evenimente pentru terenul $fieldId"]);
     }
 
     public function viewEvent($eventId) {
@@ -71,7 +71,7 @@ class Event extends Controller
         $creator = DatabaseService::runSelect("SELECT username FROM users WHERE id = " . $event[0]['creator_id'] . " LIMIT 1");
         $event[0]['creator_username'] = $creator[0]['username'] ?? 'Necunoscut';
 
-        $this->view("event/view", ["events" => $event, "fieldId" => $fieldId, "eventTags" => $eventTags]);
+        $this->view("event/view", ["events" => $event, "fieldId" => $fieldId, "eventTags" => $eventTags, "title" => ""]);
     }
 
     public function addEvent()

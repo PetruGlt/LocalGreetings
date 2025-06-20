@@ -24,7 +24,7 @@ if (isset($_SESSION['errorMessage'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sports Meetup - Find Courts</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="<?= Config::get("APP_URL"); ?>/css/MainPage.css">
+    <link rel="stylesheet" href="<?= Config::get("APP_URL"); ?>/css/MainStyle.css">
     <style>
         .error-notification {
             background-color: #f44336;
@@ -50,21 +50,7 @@ if (isset($_SESSION['errorMessage'])) {
 <?php include_once __DIR__ . '/../partials/errorDiv.php'; ?>
 
 
-<nav>
-    <div class="logo">
-        Sport<span>IS</span>
-    </div>
-    <div>
-        <a href="../home/mainPage">Acasa</a>
-        <a href="#event-list">Evenimente</a>
-        <a href="#social">Social</a>
-        <a href="#profile">Profil</a>
-        <a href="../home/news">Stiri</a>
-        <form action="../home/logout" method="post" style="display: inline;">
-            <button id="logout" type="submit" >Deconectare</button>
-        </form>
-    </div>
-</nav>
+<?php include_once __DIR__ . '/../partials/navbar.php'; ?>
 
 <div class="container">
     <h1>Terenurile de sport disponibile</h1>

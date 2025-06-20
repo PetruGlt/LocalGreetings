@@ -9,12 +9,14 @@ body {
 
 nav {
     position: sticky;
+    top: 0;
     background-color: #1e1e2f;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 14px 30px;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    z-index: 999;
 }
 
 #logout {
