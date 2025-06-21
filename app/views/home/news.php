@@ -9,7 +9,7 @@
 </head>
 <body>
     
-    <?php include_once __DIR__ . '/../partials/navbar.php'; ?>
+    <?php include_once __DIR__ . '/../partials/navBar.php'; ?>
 
     <div class="container">
       <?php foreach ($data as $source => $articles): ?>

@@ -60,15 +60,14 @@ class EventModel
             LEFT JOIN tags AS t ON t.id = et.tag_id";
         
         $bindParams = [];
+        $conjunction = "";
 
         if(!!$filters) {
-            $queryBuilder .= " WHERE";
-            $conjunction = "";
             if(isset($filters['name'])) {
                 $conjunction .= "AND e.name LIKE ? ";
                 $bindParams[] = '%' . $filters['name'] . '%';
             }
-            if(isset($filters['tags'])) {
+            if(isset($filters['tags']) && array_search("0", $filters['tags']) === false) {
                 $conjunction .= "AND t.id IN (";
                 foreach($filters['tags'] as $tag) {
                     $conjunction .= "?,";
@@ -88,13 +87,57 @@ class EventModel
                 $conjunction .= "AND e.max_participants <= ? ";
                 $bindParams[] = $filters['max_participants'];
             }
-            $queryBuilder .= substr_replace($conjunction, "", 0, 3);
+            if($conjunction !== "")
+                $conjunction = " WHERE " . substr_replace($conjunction, "", 0, 3);
         }
 
-        $queryBuilder .= " GROUP BY e.id";
+        $queryBuilder .= $conjunction . " GROUP BY e.id";
 
         $eventsData = DatabaseService::runSelect($queryBuilder, ...$bindParams);
         return $eventsData;
     }
+
+    public static function isParticipant($eventId, $userId) {
+        $sql = "SELECT user_id FROM event_participants WHERE event_id = ? AND user_id = ?";
+        $participant = DatabaseService::runSelect($sql, (int)$eventId, (int)$userId);
+        return !!$participant;
+    }
+
+    public static function getEventsForUser($userId) {
+        $sql = "SELECT e.* FROM event_participants AS ep
+            INNER JOIN events AS e ON e.id = ep.event_id
+            WHERE ep.user_id = ?";
+        return DatabaseService::runSelect($sql, (int)$userId);
+    }
+
+    public static function getParticipants($eventId) {
+        $sql = "SELECT u.id, u.username FROM event_participants AS ep
+            INNER JOIN users AS u ON u.id = ep.user_id
+            WHERE ep.event_id = ?";
+        return DatabaseService::runSelect($sql, (int)$eventId);
+    }
     
+    public static function participate($eventId, $userId) {
+        if(!self::isParticipant($eventId, $userId)) {
+            $sql = "INSERT INTO event_participants(event_id,user_id) VALUES (?,?)";
+            DatabaseService::runDML(
+                $sql,
+                "ii",
+                $eventId,
+                $userId
+            );
+        }
+    }
+
+    public static function cancel($eventId, $userId) {
+        if(self::isParticipant($eventId, $userId)) {
+            $sql = "DELETE FROM event_participants WHERE event_id = ? AND user_id = ?";
+            DatabaseService::runDML(
+                $sql,
+                "ii",
+                $eventId,
+                $userId
+            );
+        }
+    }
 }

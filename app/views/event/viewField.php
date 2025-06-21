@@ -7,7 +7,7 @@
 </head>
 <body>
     
-    <?php include_once __DIR__ . '/../partials/navbar.php'; ?>
+    <?php include_once __DIR__ . '/../partials/navBar.php'; ?>
 
     <?php include_once __DIR__ . '/../partials/errorDiv.php'; ?>
     <div class="container">
