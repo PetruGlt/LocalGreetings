@@ -133,7 +133,7 @@ if (isset($_SESSION['errorMessage'])) {
 
                     <label>Tag-uri</label>
                     <select name="tags[]" multiple>
-                        <option value="1">Greeting</option>
+                        <option value="1">Nou</option>
                         <option value="2">Tenis</option>
                         <option value="3">Sport</option>
                     </select>
