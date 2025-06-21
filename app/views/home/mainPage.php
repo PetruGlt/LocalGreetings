@@ -121,6 +121,7 @@ if (isset($_SESSION['errorMessage'])) {
                     <button style="border-radius: 10px; opacity: 80%; background-color:rgb(64, 172, 67); color: white;" onclick="openEventModal(${location.id})">Adauga Eveniment</button>
                 `);
             markerMap.set(Number(location.id), marker)
+            
         })
     </script>
     <div class="upcoming-events">
