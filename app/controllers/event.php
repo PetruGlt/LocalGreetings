@@ -39,7 +39,7 @@ class Event extends Controller
             $events[$i]['creator_username'] = $creator[0]['username'] ?? 'Necunoscut';
         }
 
-        $this->view("event/view", ["events" => $events, "fieldId" => $fieldId, "eventTags" => $eventTags, "title" => "Lista evenimente pentru terenul $fieldId"]);
+        $this->view("event/viewField", ["events" => $events, "fieldId" => $fieldId, "eventTags" => $eventTags, "title" => "Lista evenimente pentru terenul $fieldId"]);
     }
 
     public function viewEvent($eventId) {
@@ -52,28 +52,30 @@ class Event extends Controller
             exit;
         }
 
-        $fieldId = $event[0]['field_id'];
+        $event = $event[0];
+
+        $fieldId = $event['field_id'];
         $tags = DatabaseService::runSelect(
-            "SELECT et.event_id, t.name 
+            "SELECT t.name 
              FROM event_tags et
              JOIN tags t ON et.tag_id = t.id
              WHERE et.event_id = ?", (int)$eventId
-            ); 
-        
-        $eventTags = [];
+            );
+        if(!empty($tags))
+            $tags = array_map(function ($tag) {
+                return $tag["name"];
+            }, $tags);
 
-        if(!empty($tags)){
-            foreach ($tags as $tag) {
-                if($tag != null)
-                    $eventTags[$tag['event_id']][] = $tag['name'];
-                else continue;
-            }
-        }
+        $creator = DatabaseService::runSelect("SELECT username FROM users WHERE id = ? LIMIT 1", $event['creator_id'])[0];
+        $event['creator_username'] = $creator['username'] ?? 'Necunoscut';
 
-        $creator = DatabaseService::runSelect("SELECT username FROM users WHERE id = ? LIMIT 1", $event[0]['creator_id']);
-        $event[0]['creator_username'] = $creator[0]['username'] ?? 'Necunoscut';
-
-        $this->view("event/view", ["events" => $event, "fieldId" => $fieldId, "eventTags" => $eventTags, "title" => ""]);
+        $this->view("event/viewEvent", [
+            "event" => $event,
+            "fieldId" => $fieldId,
+            "eventTags" => $tags,
+            "isParticipant" => EventModel::isParticipant($eventId, $_SESSION['user_id']),
+            "participants" => EventModel::getParticipants($eventId) ?? []
+        ]);
     }
 
     public function addEvent()
@@ -151,6 +153,20 @@ class Event extends Controller
             
             echo json_encode($events ?? []);
 
+        }
+    }
+
+    public function participate($eventId) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            EventModel::participate($eventId, $_SESSION['user_id']);
+            echo "Success";
+        }
+    }
+
+    public function cancel($eventId) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            EventModel::cancel($eventId, $_SESSION['user_id']);
+            echo "Success";
         }
     }
 }

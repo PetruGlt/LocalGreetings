@@ -4,6 +4,8 @@
 $sql = "SELECT id, osm_id, lat, lon, name, sport, surface FROM sports_fields";
 $locations = DatabaseService::runSelect($sql);
 
+$sql = "SELECT id, name FROM tags";
+$tags = DatabaseService::runSelect($sql);
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -50,7 +52,7 @@ if (isset($_SESSION['errorMessage'])) {
 <?php include_once __DIR__ . '/../partials/errorDiv.php'; ?>
 
 
-<?php include_once __DIR__ . '/../partials/navbar.php'; ?>
+<?php include_once __DIR__ . '/../partials/navBar.php'; ?>
 
 <div class="container">
     <h1>Terenurile de sport disponibile</h1>
@@ -134,9 +136,10 @@ if (isset($_SESSION['errorMessage'])) {
 
                     <label>Tag-uri</label>
                     <select name="tags[]" multiple>
-                        <option value="1">Nou</option>
-                        <option value="2">Tenis</option>
-                        <option value="3">Sport</option>
+                        <option value="0">Toate</option>
+                        <?php foreach($tags as $tag): ?>
+                            <option value="<?= $tag["id"] ?>"><?= $tag["name"] ?></option>
+                        <?php endforeach; ?>
                     </select>
 
                     <label>De la:</label>

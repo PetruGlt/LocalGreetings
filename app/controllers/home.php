@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/../models/EventModel.php';
+
 class Home extends Controller
 {
     public function hello($name = ' '){
@@ -46,8 +48,14 @@ class Home extends Controller
         $userData = DatabaseService::runSelect(
             "SELECT * FROM users WHERE id = " . $id . " LIMIT 1"
         );
+
+        $events = EventModel::getEventsForUser($id);
+
         // echo $userData[0]['username'];
-        $this->view('home/profilePage', ['user' => $userData[0]]);
+        $this->view('home/profilePage', [
+            'user' => $userData[0],
+            'events' => $events
+        ]);
 
     }
 

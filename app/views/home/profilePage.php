@@ -8,7 +8,7 @@
 <body>
 
     
-<?php include_once __DIR__ . '/../partials/navbar.php'; ?>
+<?php include_once __DIR__ . '/../partials/navBar.php'; ?>
 
     <div class="container">
     <h1>Profilul utilizatorului: <?= htmlspecialchars($user['username']); ?></h1>
@@ -20,7 +20,7 @@
         <ul>
             <?php foreach ($events as $event): ?>
                 <li>
-                    <?= htmlspecialchars($event['name']); ?> — <?= htmlspecialchars($event['date']); ?> (<?= htmlspecialchars($event['location']); ?>)
+                    <?= htmlspecialchars($event['name']); ?> — <?= htmlspecialchars($event['event_time_start']); ?> : <?= htmlspecialchars($event['event_time_end']); ?> (<?= htmlspecialchars($event['field_id']); ?>)
                 </li>
             <?php endforeach; ?>
         </ul>
