@@ -29,6 +29,6 @@
         <hr>
     <?php endforeach; ?>
 </div>
-    </div>
+    
 </body>
 </html>
