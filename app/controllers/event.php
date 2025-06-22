@@ -153,7 +153,7 @@ class Event extends Controller
             $event = EventModel::findEventById($eventId);
             if (empty($event)) {
                 http_response_code(404);
-                die('Evenimentul nu a fost găsit.');
+                die('Evenimentul nu a fost gasit');
             }
             if ($event[0]['creator_id'] != $_SESSION['user_id']) {
                 http_response_code(403);
