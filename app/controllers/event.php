@@ -89,8 +89,7 @@ class Event extends Controller
             $eventTimeStart = $_POST['event_time_start'];
             $eventTimeEnd = $_POST['event_time_end'];
             $description = $_POST['description'];
-            $rawTags = $_POST['tags'] ?? '';
-            $tagsArray = array_filter(array_map('trim', explode(',', $rawTags)));
+            $tags = $_POST['tags'] ?? '';
 
 
             $start = new DateTime($eventTimeStart);
@@ -111,17 +110,10 @@ class Event extends Controller
             if ($success) {
                  $eventID = DatabaseService::getLastInsertId();
 
-                foreach($tagsArray as $tag){
-                    $tagCheck = EventModel::findTagByName($tag);
-                    if(!empty($tagCheck)) {
-                        $tagID = $tagCheck['id'];
-                    } else {
-                        EventModel::insertTagInTags($tag);
-                        $tagID = DatabaseService::getLastInsertId();
-                    }
-                    $exists = DatabaseService::runSelect("SELECT * FROM event_tags WHERE event_id = ? AND tag_id = ?", $eventID, $tagID);
+                foreach($tags as $tag){
+                    $exists = DatabaseService::runSelect("SELECT * FROM event_tags WHERE event_id = ? AND tag_id = ?", $eventID, $tag);
                     if(empty($exists)) {
-                        EventModel::insertEventTag($eventID, $tagID);
+                        EventModel::insertEventTag($eventID, $tag);
                     }
                 }
                 
@@ -154,6 +146,22 @@ class Event extends Controller
             echo json_encode($events ?? []);
 
         }
+    }
+    
+    public function deleteEvent($eventId) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $event = EventModel::findEventById($eventId);
+            if (empty($event)) {
+                http_response_code(404);
+                die('Evenimentul nu a fost gasit');
+            }
+            if ($event[0]['creator_id'] != $_SESSION['user_id']) {
+                http_response_code(403);
+                die('Acces interzis.');
+            }
+            EventModel::deleteEvent($eventId);
+        }
+        $this->view('home/mainPage');
     }
 
     public function participate($eventId) {

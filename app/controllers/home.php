@@ -32,9 +32,9 @@ class Home extends Controller
         
         $newsModel = $this->model('News');
 
-        $sursa1 = $newsModel->fetchNews('https://www.digi24.ro/rss');
+        $sursa1 = $newsModel->fetchNews('https://www.digi24.ro/rss/stiri/sport');
         $sursa2 = $newsModel->fetchNews('https://rss.app/feeds/XUK3Z066WY4rYJ8k.xml');
-        $sursa3 = $newsModel->fetchNews('https://observatornews.ro/rss');
+        $sursa3 = $newsModel->fetchNews('https://observatornews.ro/rss/sport/');
     
         $this->view('home/news', [
             'Digi24'=>$sursa1,
@@ -51,11 +51,33 @@ class Home extends Controller
 
         $events = EventModel::getEventsForUser($id);
 
+        $createdEvents = DatabaseService::runSelect(
+            "SELECT e.id, e.name, e.event_time_start, e.event_time_end, e.field_id
+            FROM events e
+            WHERE e.creator_id = ?",
+            $id
+        );
+
+        $friends = DatabaseService::runSelect(
+            "SELECT u.id, u.username, f.created_at
+            FROM users u
+            JOIN friendships f ON (
+                (f.friend_id = u.id AND f.user_id = ?) OR
+                (f.user_id = u.id AND f.friend_id = ?)
+            )
+            WHERE f.status = 'accepted' AND u.id != ?",
+            $id, $id, $id
+        );
+            
         // echo $userData[0]['username'];
         $this->view('home/profilePage', [
             'user' => $userData[0],
-            'events' => $events
+            'events' => $events,
+            'createdEvents' => $createdEvents,
+            'friends' => $friends
         ]);
+
+
 
     }
 

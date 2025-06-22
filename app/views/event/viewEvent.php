@@ -2,9 +2,31 @@
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evenimente</title>
     <link rel="stylesheet" href="<?php echo Config::get('APP_URL'); ?>/css/MainStyle.css">
     <script src="<?= Config::get("APP_URL"); ?>/js/event.js" defer></script>
+     <style>
+        #participate {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #cancel {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+    </style>
 </head>
 <body>
     
@@ -37,17 +59,17 @@
             Anuleaza participarea
         </button>
         <h2>Participanti</h2>
-        <ul id="participant-list">
+        <ul class="user-list">
+            <?php if (empty($participants)): ?>
+                <p>Nu sunt participanti la acest eveniment.</p>
+            <?php else: ?>
             <?php foreach($participants as $participant): ?>
-                <li class="participant-card">
-                    <h3><?= $participant['username'] ?></h3>
-                    <button>
-                        <a href="<?= Config::get("APP_URL"); ?>/home/viewProfile/<?= $participant['id'] ?>">
-                            Vezi profil
-                        </a>
-                    </button>
+                <li class="user-card">
+                    <h3><a style="text-decoration: none; color: #1e1e2f;" href="<?= Config::get("APP_URL"); ?>/home/viewProfile/<?= $participant['id'] ?>"><?= $participant['username'] ?></a></h3>
+                    <p>Data inregistrarii: <?= $participant['join_date'] ?></p>
                 </li>
             <?php endforeach; ?>
+            <?php endif; ?>
         </ul>
 </div>
     
