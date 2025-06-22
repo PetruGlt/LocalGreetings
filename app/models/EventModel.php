@@ -52,6 +52,11 @@ class EventModel
         );
     }
 
+    public static function deleteEvent($eventId) {
+        $sql = "DELETE FROM events WHERE id = ?";
+        DatabaseService::runDML($sql, "i", $eventId);
+    }
+
     public static function getEvents($filters) {
 
         $queryBuilder = "SELECT e.*, GROUP_CONCAT(CONCAT('#', t.name)) AS tags, sf.lat, sf.lon FROM events AS e
@@ -111,7 +116,7 @@ class EventModel
     }
 
     public static function getParticipants($eventId) {
-        $sql = "SELECT u.id, u.username FROM event_participants AS ep
+        $sql = "SELECT u.id, u.username, ep.join_date FROM event_participants AS ep
             INNER JOIN users AS u ON u.id = ep.user_id
             WHERE ep.event_id = ?";
         return DatabaseService::runSelect($sql, (int)$eventId);

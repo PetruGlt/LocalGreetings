@@ -62,13 +62,13 @@ class social extends Controller {
         DatabaseService::runDML("
             INSERT INTO friendships (user_id, friend_id) VALUES (? , ?)", "ii", $userId, $friendId  
         );
-        header("Location: ../social/index");
+        header("Location: ../../social/index");
     }
 
     public function acceptRequest($requestId) {
         DatabaseService::runDML("
             UPDATE friendships SET status = 'accepted' WHERE id = ?", "i", $requestId);
-        header("Location: ../social/index");
+        header("Location: ../../social/index");
     }
 
     public function pendingRequests() {
@@ -88,6 +88,6 @@ class social extends Controller {
             WHERE (user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?)", 
             "iiii", $userId, $friendId, $friendId, $userId
         );
-        header("Location: ../social/index");
+        header("Location: ../../social/index");
     }
 }

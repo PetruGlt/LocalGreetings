@@ -9,13 +9,17 @@
       <label>Nume eveniment:</label><br>
       <input type="text" name="name" required><br><br>
 
-      <label>Tip eveniment:</label><br>
-      <input type="text" name="tags" required><br><br>
-
-       <label>De la: Dată și oră:</label><br>
+      <label>Tag-uri eveniment:</label><br>
+      <select name="tags[]" multiple style="width: 100%; height: 100px;">
+                        <?php foreach($tags as $tag): ?>
+                            <option value="<?= $tag["id"] ?>"><?= $tag["name"] ?></option>
+                        <?php endforeach; ?>
+      </select><br><br>
+      
+       <label>De la: Data si ora:</label><br>
         <input type="datetime-local" name="event_time_start" required><br><br>
 
-        <label>Pana la: Dată și oră:</label><br>
+        <label>Pana la: Data si ora:</label><br>
         <input type="datetime-local" name="event_time_end" required><br><br>
 
         <label>Descriere:</label><br>

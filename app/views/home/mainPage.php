@@ -20,7 +20,7 @@ if (isset($_SESSION['errorMessage'])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ro">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,6 +40,7 @@ if (isset($_SESSION['errorMessage'])) {
             opacity: 0.95;
             transition: opacity 0.3s ease;
         }
+        
     </style>
     <script src="<?= Config::get("APP_URL"); ?>/js/notifications.js" defer></script>
     <script src="<?= Config::get("APP_URL"); ?>/js/eventList.js" defer></script>
@@ -126,39 +127,52 @@ if (isset($_SESSION['errorMessage'])) {
             
         })
     </script>
+    <br><br>
     <div class="upcoming-events">
-        <h2>Evenimente: </h2>
-        <div>
+        <h1>Evenimente: </h1>
             <div class="filter-header">
                 <form onsubmit="event.preventDefault(); getEvents(this)">
-                    <label>Nume:</label>
-                    <input type="text" name="name">
+                    <div class="filter-element">
+                        <label>Nume:</label>
+                        <input type="text" name="name">
+                    </div>
 
-                    <label>Tag-uri</label>
-                    <select name="tags[]" multiple>
-                        <option value="0">Toate</option>
-                        <?php foreach($tags as $tag): ?>
-                            <option value="<?= $tag["id"] ?>"><?= $tag["name"] ?></option>
-                        <?php endforeach; ?>
-                    </select>
-
-                    <label>De la:</label>
-                    <input type="datetime-local" name="event_time_start">
-
-                    <label>Pana la:</label>
-                    <input type="datetime-local" name="event_time_end">
-
-                    <label>Max. part.:</label>
-                    <input type="number" name="max_participants" min="2">
-                            
-                    <input type="submit" value="Filtreaza">
+                    <div class="filter-element">
+                        <label>Tag-uri</label>
+                        <select name="tags[]" multiple>
+                            <option value="0">Toate</option>
+                            <?php foreach($tags as $tag): ?>
+                                <option value="<?= $tag["id"] ?>"><?= $tag["name"] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-element">
+                        <label>De la:</label>
+                        <input type="datetime-local" name="event_time_start">
+                    </div>
+                    
+                    <div class="filter-element">
+                        <label>Pana la:</label>
+                        <input type="datetime-local" name="event_time_end">
+                    </div>
+                    
+                    <div class="filter-element">    
+                        <label>Max. part.:</label>
+                        <input type="number" name="max_participants" min="2">
+                    </div>
+                    <input type="submit" value="Filtreaza">  
                 </form>
             </div>
             <div class="event-header">
                 <h2>Name</h2>
-                <h2>Max. participants</h2>
+                <h2>|</h2>
+                <h2>Max</h2>
+                <h2>|</h2>
                 <h2>Time</h2>
+                <h2>|</h2>
                 <h2>Tags</h2>
+                <h2>|</h2>
                 <h2>Actions</h2>
             </div>
             <ul id="event-list"></ul>
