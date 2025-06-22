@@ -15,7 +15,7 @@
     <div class="container">
     <h1>Profilul utilizatorului: <?= htmlspecialchars($user['username']); ?></h1>
     <p><strong>Email: </strong><a style="text-decoration: none; color:rgb(48, 48, 203);" href="mailto:someone@example.com"><?= htmlspecialchars($user['email']); ?></a></p>
-    <p><strong>Data înregistrării:</strong> <?= htmlspecialchars($user['registration_date']); ?></p>
+    <p><strong>Data inregistrarii:</strong> <?= htmlspecialchars($user['registration_date']); ?></p>
         <h2>Participant la:</h2>
         <ul class="event-list">
             <?php if(!empty($events)): ?>
