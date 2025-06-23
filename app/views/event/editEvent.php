@@ -46,7 +46,7 @@
             <input name="max_participants" type="number" value="<?= $event["max_participants"] ?>" required />
             <p><strong>Tags:</strong>
                 <?php
-                    echo implode(", ", $eventTags);
+                    echo !empty($eventTags) ? implode(", ", $eventTags) : "";
                 ?>
             </p>
             <button type="submit" class="button-success">Update</button>

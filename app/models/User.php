@@ -2,6 +2,14 @@
 // MODEL: Handles data access
 class User
 {   
+    public function findById($userId)
+    {
+        $user = DatabaseService::runSelect(
+            "SELECT * FROM users WHERE id = ? LIMIT 1", $userId
+        );
+        return $user != null ? $user[0] : null;
+    }
+
     public function findByEmail($email)
     {
         $user = DatabaseService::runSelect(
@@ -66,7 +74,7 @@ class User
 
     public function getFriends($userId){
         return DatabaseService::runSelect("
-            SELECT u.id, u.username
+            SELECT u.id, u.username, f.created_at
             FROM users u
             JOIN friendships f ON (
                 (f.friend_id = u.id AND f.user_id = ?) OR

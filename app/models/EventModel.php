@@ -11,6 +11,15 @@ class EventModel
         return $tagData;
     }
 
+    public static function findByCreator($id) {
+        return DatabaseService::runSelect(
+            "SELECT e.id, e.name, e.event_time_start, e.event_time_end, e.field_id
+            FROM events e
+            WHERE e.creator_id = ?",
+            $id
+        );
+    }
+
     public static function registerEvent($name, $userId, $fieldId, $maxParticipants, $eventTimeStart, $eventTimeEnd, $description)
     {
         $sql = "INSERT INTO events (name, creator_id, field_id, max_participants, event_time_start, event_time_end, description)

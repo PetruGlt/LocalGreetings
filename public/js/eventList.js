@@ -46,7 +46,7 @@ function createDOMItem(event) {
 
     const tags = document.createElement('span')
     tags.classList.add('tags-section')
-    tags.innerText = event.tags.split(',').join(' ')
+    tags.innerText = event.tags?.split(',').join(' ') || "None"
     listItem.appendChild(tags)
 
     const viewEventButton = document.createElement('button')

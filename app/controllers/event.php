@@ -4,16 +4,19 @@ require_once __DIR__ . '/../models/EventModel.php';
 
 class Event extends Controller
 {
+    private $tagModel;
+    private $userModel;
 
     public function __construct() {
         if(!$this->isAuthenticated()) {
             header("Location: /LocalGreetings/public/login/index");
             exit;
         }
+        $this->tagModel = $this->model('Tag');
+        $this->userModel = $this->model('User');
     }
 
     public function viewField($fieldId) {
-        require_once __DIR__ . '/../services/DatabaseService.php';
 
         $events = EventModel::findEventsByFieldId($fieldId);
         if (empty($events)) {
@@ -23,14 +26,7 @@ class Event extends Controller
             exit;
         }
 
-        $tags = DatabaseService::runSelect(
-            "SELECT et.event_id, t.name 
-             FROM event_tags et
-             JOIN tags t ON et.tag_id = t.id
-             WHERE et.event_id IN (SELECT id FROM events WHERE field_id = ?)", 
-             
-             (int)$fieldId
-            ); 
+        $tags = $this->tagModel->getTagsForField($fieldId);
         
         $eventTags = [];
         if(!empty($tags)){
@@ -42,15 +38,14 @@ class Event extends Controller
         }
         
         for( $i = 0; $i < count($events); $i++ ) {
-            $creator = DatabaseService::runSelect("SELECT username FROM users WHERE id = ? LIMIT 1", $events[$i]['creator_id']);
-            $events[$i]['creator_username'] = $creator[0]['username'] ?? 'Necunoscut';
+            $creator = $this->userModel->findById($events[$i]['creator_id']);
+            $events[$i]['creator_username'] = $creator['username'] ?? 'Necunoscut';
         }
 
         $this->view("event/viewField", ["events" => $events, "fieldId" => $fieldId, "eventTags" => $eventTags, "title" => "Lista evenimente pentru terenul $fieldId"]);
     }
 
     public function viewEvent($eventId) {
-        require_once __DIR__ . '/../services/DatabaseService.php';
         $event = EventModel::findEventById($eventId);
         
         if (empty($event)) {
@@ -64,18 +59,13 @@ class Event extends Controller
         $hasStarted = new DateTime($event['event_time_start']) <= new DateTime();
 
         $fieldId = $event['field_id'];
-        $tags = DatabaseService::runSelect(
-            "SELECT t.name 
-             FROM event_tags et
-             JOIN tags t ON et.tag_id = t.id
-             WHERE et.event_id = ?", (int)$eventId
-            );
+        $tags = $this->tagModel->getTagsByEvent($eventId);
         if(!empty($tags))
             $tags = array_map(function ($tag) {
                 return $tag["name"];
             }, $tags);
 
-        $creator = DatabaseService::runSelect("SELECT username FROM users WHERE id = ? LIMIT 1", $event['creator_id'])[0];
+        $creator = $this->userModel->findById($event['creator_id']);
         $event['creator_username'] = $creator['username'] ?? 'Necunoscut';
 
         $errorMessage = "";
@@ -108,12 +98,7 @@ class Event extends Controller
         $event = $event[0];
 
         $fieldId = $event['field_id'];
-        $tags = DatabaseService::runSelect(
-            "SELECT t.name 
-             FROM event_tags et
-             JOIN tags t ON et.tag_id = t.id
-             WHERE et.event_id = ?", (int)$eventId
-            );
+        $tags = $this->tagModel->getTagsByEvent($eventId);
         if(!empty($tags))
             $tags = array_map(function ($tag) {
                 return $tag["name"];
@@ -159,8 +144,7 @@ class Event extends Controller
                  $eventID = DatabaseService::getLastInsertId();
 
                 foreach($tags as $tag){
-                    $exists = DatabaseService::runSelect("SELECT * FROM event_tags WHERE event_id = ? AND tag_id = ?", $eventID, $tag);
-                    if(empty($exists)) {
+                    if($this->tagModel->checkEventTag($eventID, $tag)) {
                         EventModel::insertEventTag($eventID, $tag);
                     }
                 }
