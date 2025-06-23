@@ -48,6 +48,10 @@
     <hr>
 
     <h1>Toti utilizatorii</h1>
+    <form method="get" action="<?= Config::get('APP_URL'); ?>/social/index">
+        <input name="username" type="text" value="<?= $username ?>"/>
+        <button type="submit">Filtreaza</button>
+    </form>
     <ul class="user-list">
         <?php foreach ($allUsers as $user): ?>
             <li class="user-card">

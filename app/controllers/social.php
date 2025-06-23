@@ -36,24 +36,42 @@ class social extends Controller {
             ORDER BY RAND() LIMIT 5
         ",  $userId, $userId, $userId, $userId);
 
-        //toti utilizatorii (fara userul curent si prietenii deja existenti)
-        $allUsers = DatabaseService::runSelect("
-            SELECT u.id, u.username
-            FROM users u
-            WHERE u.id != ? AND u.id NOT IN (
-                SELECT CASE 
-                    WHEN f.user_id = ? THEN f.friend_id
-                    ELSE f.user_id
-                END
-                FROM friendships f
-                WHERE (f.user_id = ? OR f.friend_id = ?) AND f.status = 'accepted'
-            )
-        ",  $userId, $userId, $userId, $userId);
+        $username = !empty($_GET['username']) ? $_GET['username'] : "";
+
+        $allUsers = [];
+
+        if(!empty($username))
+            $allUsers = DatabaseService::runSelect("
+                SELECT u.id, u.username
+                FROM users u
+                WHERE u.id != ? AND u.id NOT IN (
+                    SELECT CASE 
+                        WHEN f.user_id = ? THEN f.friend_id
+                        ELSE f.user_id
+                    END
+                    FROM friendships f
+                    WHERE (f.user_id = ? OR f.friend_id = ?) AND f.status = 'accepted'
+                ) AND u.username LIKE ?
+            ",  $userId, $userId, $userId, $userId, '%' . $username . '%');
+        else
+            $allUsers = DatabaseService::runSelect("
+                SELECT u.id, u.username
+                FROM users u
+                WHERE u.id != ? AND u.id NOT IN (
+                    SELECT CASE 
+                        WHEN f.user_id = ? THEN f.friend_id
+                        ELSE f.user_id
+                    END
+                    FROM friendships f
+                    WHERE (f.user_id = ? OR f.friend_id = ?) AND f.status = 'accepted'
+                )
+            ",  $userId, $userId, $userId, $userId);
 
         $this->view('social/index', [
-            'friends' => $friends,
-            'randomUsers' => $randomUsers,
-            'allUsers' => $allUsers
+            'friends' => $friends ?? [],
+            'randomUsers' => $randomUsers ?? [],
+            'allUsers' => $allUsers ?? [],
+            'username' => $username
         ]);
     }
 
