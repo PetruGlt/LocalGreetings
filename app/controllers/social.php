@@ -1,6 +1,13 @@
 <?php
 class social extends Controller {
 
+    public function __construct() {
+        if(!$this->isAuthenticated()) {
+            header("Location: /LocalGreetings/public/login/index");
+            exit;
+        }
+    }
+
     public function index() {
         
         if (!isset($_SESSION['user_id'])) {
