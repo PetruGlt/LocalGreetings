@@ -337,4 +337,5 @@ body.modal-open {
 
 .tags-section {
     max-width: 200px;
+    overflow-wrap: break-word;
 }

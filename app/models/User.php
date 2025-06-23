@@ -34,7 +34,7 @@ class User
     }
     
     public function adminUserList($username = null) {
-        $sql = "SELECT id, username FROM users WHERE is_admin = 0";
+        $sql = "SELECT id, username, is_banned FROM users WHERE is_admin = 0";
         $users = null;
         
         if($username != null) {
@@ -55,6 +55,12 @@ class User
     public function ban($userId) {
         DatabaseService::runDML("
             UPDATE users SET is_banned = 1 WHERE id = ?
+        ", "i", (int) $userId);
+    }
+
+    public function unban($userId) {
+        DatabaseService::runDML("
+            UPDATE users SET is_banned = 0 WHERE id = ?
         ", "i", (int) $userId);
     }
 }

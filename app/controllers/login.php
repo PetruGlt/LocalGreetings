@@ -18,10 +18,16 @@ class Login extends Controller
             $user = $loginService->auth($email,$password);
 
             if ($user) {
+
+                if($user['is_banned'] == 1) {
+                    $errorMessage = "Activitatea ta a fost suspendata.";
+                    $this->view('login/loginPage', ['errorMessage' => $errorMessage]);
+                }
                 
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['email'] = $user['email'];
+                $_SESSION['is_admin'] = $user['is_admin'] == 1;
                 
                 // $this->view('home/mainPage');
                 header('Location: ../home/mainPage');

@@ -53,6 +53,8 @@ class EventModel
     }
 
     public static function deleteEvent($eventId) {
+        $sql = "DELETE FROM event_participants WHERE event_id = ?";
+        DatabaseService::runDML($sql, "i", $eventId);
         $sql = "DELETE FROM events WHERE id = ?";
         DatabaseService::runDML($sql, "i", $eventId);
     }
@@ -100,11 +102,11 @@ class EventModel
             }
             if(isset($filters['event_time_start'])) {
                 $conjunction .= "AND e.event_time_start >= ? ";
-                $bindParams[] = $filters['event_time_start']->getTimestamp();
+                $bindParams[] = $filters['event_time_start'];
             }
             if(isset($filters['event_time_end'])) {
                 $conjunction .= "AND e.event_time_end <= ? ";
-                $bindParams[] = $filters['event_time_end']->getTimestamp();
+                $bindParams[] = $filters['event_time_end'];
             }
             if(isset($filters['max_participants'])) {
                 $conjunction .= "AND e.max_participants <= ? ";
