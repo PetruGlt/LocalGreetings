@@ -8,6 +8,10 @@ class Admin extends Controller
     private $tagModel;
 
     public function __construct() {
+        if(!$this->isAdmin()) {
+            header("Location: /LocalGreetings/public/login/index");
+            exit;
+        }
         $this->userModel = $this->model('User');
         $this->tagModel = $this->model('Tag');
     }

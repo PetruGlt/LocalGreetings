@@ -5,6 +5,13 @@ require_once __DIR__ . '/../models/EventModel.php';
 class Event extends Controller
 {
 
+    public function __construct() {
+        if(!$this->isAuthenticated()) {
+            header("Location: /LocalGreetings/public/login/index");
+            exit;
+        }
+    }
+
     public function viewField($fieldId) {
         require_once __DIR__ . '/../services/DatabaseService.php';
 

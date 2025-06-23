@@ -18,4 +18,8 @@ class Controller
     protected function isAuthenticated() {
         return isset($_SESSION['user_id']);
     }
+
+    protected function isAdmin() {
+        return isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1;
+    }
 }

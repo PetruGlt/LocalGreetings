@@ -4,6 +4,15 @@ require_once __DIR__ . '/../models/EventModel.php';
 
 class Home extends Controller
 {
+    private $userModel;
+    public function __construct() {
+        if(!$this->isAuthenticated()) {
+            header("Location: /LocalGreetings/public/login/index");
+            exit;
+        }
+        $this->userModel = $this->model('User');
+    }
+
     public function hello($name = ' '){
         $user = $this->model('User');
         $user->name = $name;
