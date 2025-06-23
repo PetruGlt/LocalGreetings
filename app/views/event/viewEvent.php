@@ -43,7 +43,7 @@
         <p><strong>Creator:</strong> <?= $event['creator_username'] ?></p>
         <p><strong>Tags:</strong>
             <?php
-                echo implode(", ", $eventTags);
+                echo !empty($eventTags) ? implode(", ", $eventTags) : "";
             ?>
         </p>
         <?php if(!$isOwnEvent): ?>

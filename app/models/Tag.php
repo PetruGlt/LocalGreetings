@@ -37,4 +37,28 @@ class Tag
             DELETE FROM tags WHERE id = ?
         ", "i", (int) $tagId);
     }
+
+    public function getTagsForField($fieldId) {
+        return DatabaseService::runSelect(
+            "SELECT et.event_id, t.name 
+             FROM event_tags et
+             JOIN tags t ON et.tag_id = t.id
+             WHERE et.event_id IN (SELECT id FROM events WHERE field_id = ?)", 
+            (int)$fieldId
+        );
+    }
+
+    public function getTagsByEvent($eventId) {
+        return DatabaseService::runSelect(
+            "SELECT t.name 
+             FROM event_tags et
+             JOIN tags t ON et.tag_id = t.id
+             WHERE et.event_id = ?", (int)$eventId
+            );
+    }
+
+    public function checkEventTag($eventId, $tagId) {
+        $tags = DatabaseService::runSelect("SELECT * FROM event_tags WHERE event_id = ? AND tag_id = ?", $eventId, $tagId);
+        return empty($tags);
+    }
 }
