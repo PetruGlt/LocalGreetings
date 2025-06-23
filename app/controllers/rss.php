@@ -78,4 +78,14 @@ class rss extends Controller {
         echo "</channel>\n";
         echo "</rss>\n";
     }
+
+     public function send() {
+        if (!isset($_SESSION['email'])) {
+            header("Location: /LocalGreetings/public/login");
+            exit;
+        }
+
+        require_once '../app/models/RSSMailer.php';
+        RSSMailer::send( $_SESSION['email'], "http://localhost/LocalGreetings/public/rss/feed");
+    }
 }

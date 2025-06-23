@@ -60,6 +60,8 @@
     </ul>
 
     <a href="<?= Config::get('APP_URL'); ?>/social/pendingRequests" sytle="text-decoration: none;">→ Vezi cereri de prietenie</a>
+    <a href="/LocalGreetings/public/rss/send" class="btn btn-primary">Trimite fluxul RSS pe email</a>
+
 </div>
 
 </body>

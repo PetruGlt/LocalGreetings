@@ -33,7 +33,7 @@ class Home extends Controller
         $newsModel = $this->model('News');
 
         $sursa1 = $newsModel->fetchNews('https://www.digi24.ro/rss/stiri/sport');
-        $sursa2 = $newsModel->fetchNews('https://rss.app/feeds/XUK3Z066WY4rYJ8k.xml');
+        $sursa2 = $newsModel->fetchNews('https://rss.stirileprotv.ro/stiri/sport');
         $sursa3 = $newsModel->fetchNews('https://observatornews.ro/rss/sport/');
     
         $this->view('home/news', [
@@ -76,9 +76,13 @@ class Home extends Controller
             'createdEvents' => $createdEvents,
             'friends' => $friends
         ]);
-
-
-
     }
 
+    public function viewDocEn(){
+        $this->view('docs/descriptionEn');
+    }
+
+    public function viewDocRo(){
+        $this->view('docs/descriptionRo');
+    }
 }

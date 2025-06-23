@@ -16,7 +16,8 @@
     <h1>Profilul utilizatorului: <?= htmlspecialchars($user['username']); ?></h1>
     <p><strong>Email: </strong><a style="text-decoration: none; color:rgb(48, 48, 203);" href="mailto:someone@example.com"><?= htmlspecialchars($user['email']); ?></a></p>
     <p><strong>Data inregistrarii:</strong> <?= htmlspecialchars($user['registration_date']); ?></p>
-        <h2>Participant la:</h2>
+        
+    <h2>Participant la:</h2>
         <ul class="event-list">
             <?php if(!empty($events)): ?>
                 <?php foreach ($events as $event): ?>
@@ -51,7 +52,7 @@
             <?php endif; ?>
         </ul>    
     
-        <h2>Prieteni:</h2>
+        <h2>Prieteni:</h2>   
         
         <ul class="user-list">
             <?php if(!empty($friends)): ?>
@@ -71,6 +72,22 @@
                 <p>Nu are prieteni.</p>
             <?php endif; ?>
         </ul>
+
+        <div class="container">
+            <h2>Generare flux RSS</h2>
+                <form method="post">
+                    <label>Filtrare dupa fieldId:</label>
+                    <input type="text" name="fieldId"><br><br>
+
+                    <label>Filtrare dupa tag:</label>
+                    <input type="text" name="tag"><br><br>
+
+                    <button type="submit" formaction="/rss/feed" formmethod="get" target="_blank">📄 Deschide RSS</button>
+                    <button type="submit" formaction="/rss/send">✉️ Trimite pe email</button>
+                </form>
+
+        <div>
+
     </div>
 </body>
 </html>
