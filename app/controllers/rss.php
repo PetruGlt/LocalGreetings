@@ -1,13 +1,6 @@
 <?php
 class rss extends Controller {
 
-    public function __construct() {
-        if(!$this->isAuthenticated()) {
-            header("Location: /LocalGreetings/public/login/index");
-            exit;
-        }
-    }
-
     public function feed($fieldId = null, $tagName = null) {
         
         require_once __DIR__ . '/../services/DatabaseService.php';
