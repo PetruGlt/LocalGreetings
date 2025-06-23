@@ -7,6 +7,11 @@ body {
     color: #333;
 }
 
+.leaflet-control-attribution {
+    z-index: 0 !important; /* trimite în spate */
+    opacity: 0.4;           /* opțional, mai puțină vizibilitate */
+}
+
 nav {
     position: sticky;
     top: 0;
