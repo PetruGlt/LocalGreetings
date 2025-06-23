@@ -45,6 +45,7 @@ function createDOMItem(event) {
     listItem.appendChild(time)
 
     const tags = document.createElement('span')
+    tags.classList.add('tags-section')
     tags.innerText = event.tags.split(',').join(' ')
     listItem.appendChild(tags)
 
@@ -61,6 +62,10 @@ function createDOMItem(event) {
 function showInMap(event) {
     const latlng = [event.lat, event.lon]
     const marker = markerMap.get(Number(event.field_id))
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+    });
     map.flyTo(latlng, 17, {
         animate: true,
         duration: 1

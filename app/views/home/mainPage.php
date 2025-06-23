@@ -42,7 +42,6 @@ if (isset($_SESSION['errorMessage'])) {
         }
         
     </style>
-    <script src="<?= Config::get("APP_URL"); ?>/js/notifications.js" defer></script>
     <script src="<?= Config::get("APP_URL"); ?>/js/eventList.js" defer></script>
 
 </head>
@@ -61,22 +60,6 @@ if (isset($_SESSION['errorMessage'])) {
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <script>
-        function showError(message) {
-            const container = document.getElementById('error-container');
-            if (!container) return;
-
-            const notif = document.createElement('div');
-            notif.className = 'error-notification';
-            notif.textContent = message;
-
-            container.appendChild(notif);
-
-            setTimeout(() => {
-                notif.style.opacity = '0';
-                setTimeout(() => container.removeChild(notif), 300);
-            }, 5000);
-        }
-
         // Initializare mapa
         var map = L.map('map').setView([47.1585, 27.6014], 13); // Iasi city center coord
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
