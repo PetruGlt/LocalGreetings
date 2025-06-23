@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="<?php echo Config::get('APP_URL'); ?>/css/MainStyle.css">
     <script src="<?= Config::get("APP_URL"); ?>/js/event.js" defer></script>
      <style>
-        #participate {
+        .button-success {
             background-color: #4CAF50;
             color: white;
             border: none;
@@ -17,7 +17,7 @@
             transition: background-color 0.3s ease;
         }
 
-        #cancel {
+        .button-error {
             background-color: #f44336;
             color: white;
             border: none;
@@ -46,18 +46,30 @@
                 echo implode(", ", $eventTags);
             ?>
         </p>
-        <button 
-            id="participate" 
-            <?= $isParticipant ? "style=\"display: none\"" : "" ?>
-            onclick="participate(<?= $event['id'] ?>)">
-            Participa
-        </button>
-        <button 
-            id="cancel" 
-            <?= !$isParticipant ? "style=\"display: none\"" : "" ?> 
-            onclick="cancelParticipation(<?= $event['id'] ?>)">
-            Anuleaza participarea
-        </button>
+        <?php if(!$isOwnEvent): ?>
+            <?php if(!$hasStarted): ?>
+                <button 
+                    id="participate" 
+                    class="button-success"
+                    <?= $isParticipant ? "style=\"display: none\"" : "" ?>
+                    onclick="participate(<?= $event['id'] ?>)">
+                    Participa
+                </button>
+                <button 
+                    id="cancel" 
+                    class="button-error"
+                    <?= !$isParticipant ? "style=\"display: none\"" : "" ?> 
+                    onclick="cancelParticipation(<?= $event['id'] ?>)">
+                    Anuleaza participarea
+                </button>
+            <?php endif; ?>
+        <?php else: ?>
+            <button class="button-success">
+                <a href="<?= Config::get("APP_URL"); ?>/event/editEvent/<?= $event['id'] ?>">
+                    Editeaza evenimentul
+                </a>
+            </button>
+        <?php endif; ?>
         <h2>Participanti</h2>
         <ul class="user-list">
             <?php if (empty($participants)): ?>

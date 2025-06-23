@@ -33,4 +33,28 @@ class User
         return $success;
     }
     
+    public function adminUserList($username = null) {
+        $sql = "SELECT id, username FROM users WHERE is_admin = 0";
+        $users = null;
+        
+        if($username != null) {
+            $sql .= " AND username LIKE ?";
+            $username = '%' . $username . '%';
+            $users = DatabaseService::runSelect(
+                $sql,
+                $username
+            );
+        } else {
+            $users = DatabaseService::runSelect(
+                $sql
+            );
+        }
+        return $users ?? [];
+    }
+
+    public function ban($userId) {
+        DatabaseService::runDML("
+            UPDATE users SET is_banned = 1 WHERE id = ?
+        ", "i", (int) $userId);
+    }
 }

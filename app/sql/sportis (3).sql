@@ -2,12 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jun 22, 2025 at 05:24 AM
+-- Host: localhost
+-- Generation Time: Jun 23, 2025 at 04:17 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
-
-DROP SCHEMA sportis;
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,6 +22,9 @@ SET time_zone = "+00:00";
 --
 
 -- --------------------------------------------------------
+
+DROP SCHEMA sportis;
+CREATE SCHEMA sportis;
 
 --
 -- Table structure for table `events`
@@ -45,7 +46,7 @@ CREATE TABLE `events` (
 --
 
 INSERT INTO `events` (`id`, `name`, `creator_id`, `field_id`, `max_participants`, `event_time_start`, `event_time_end`, `description`) VALUES
-(1, 'Meci demonstrativ', 9, 134, 100, '2025-06-25 10:01:00', '2025-06-25 14:30:00', 'Eveniment caritabil. Meci de tenis demonstrativ. '),
+(1, 'Meci demonstrativ', 9, 134, 3, '2025-06-25 10:01:00', '2025-06-25 14:30:00', 'Eveniment caritabil. Meci de tenis demonstrativ. '),
 (2, 'Meci de fotbal U22', 9, 275, 12, '2025-06-22 20:00:00', '2025-06-22 23:00:00', 'Meci de fotbal');
 
 -- --------------------------------------------------------
@@ -65,6 +66,7 @@ CREATE TABLE `event_participants` (
 --
 
 INSERT INTO `event_participants` (`event_id`, `user_id`, `join_date`) VALUES
+(1, 2, '2025-06-22 18:40:07'),
 (1, 9, '2025-06-22 06:09:22'),
 (11, 9, '2025-06-22 03:03:49'),
 (12, 9, '2025-06-22 04:13:59'),
@@ -609,20 +611,22 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `registration_date` datetime DEFAULT current_timestamp()
+  `registration_date` datetime DEFAULT current_timestamp(),
+  `is_admin` tinyint(1) DEFAULT 0,
+  `is_banned` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `username`, `password`, `registration_date`) VALUES
-(1, 'admin@admin', 'admin', '$2y$10$hzjCFNKdLSao42Za1ViaX.qv9Va3cUFuWZ1QmwWJpeBYVUegrxWM2', '2025-06-20 15:48:15'),
-(2, 'incognito@sportis', 'incognito', '$2y$10$PcrEICy0sNd0yZEdLsvwEu1QiIBDs3wxcC7lgpLeSo3cUFmZ2pwAW', '2025-06-20 15:48:15'),
-(6, 'student@student', 'student', '$2y$10$zMwB/fhkMfkrBxma3fzR9Ogrq4FcK91VGFW9OKj5Fa2Hl541kPf5O', '2025-06-20 15:04:40'),
-(7, 'user@user', 'user1', '$2y$10$RZCBvCoBLhzyzBxvEzrLe.BPh6E2fN/nVCoAdEaRnn7Pqci5PpgbO', '2025-06-21 02:33:56'),
-(8, 'user2@user', 'user2', '$2y$10$fUdbtObH43AVbgSZ8/tJPOtlvQEd1WisH1uE.GZiXrCzQpR31DHG.', '2025-06-21 02:34:14'),
-(9, 'user3@user', 'user3', '$2y$10$HyAzBHVcKsAKeJokFR3gieV8wEWQCQVFoQwz3gZpJBceHrIm9rBSq', '2025-06-21 02:34:30');
+INSERT INTO `users` (`id`, `email`, `username`, `password`, `registration_date`, `is_admin`) VALUES
+(1, 'admin@admin', 'admin', '$2y$10$hzjCFNKdLSao42Za1ViaX.qv9Va3cUFuWZ1QmwWJpeBYVUegrxWM2', '2025-06-20 15:48:15', 1),
+(2, 'incognito@sportis', 'incognito', '$2y$10$PcrEICy0sNd0yZEdLsvwEu1QiIBDs3wxcC7lgpLeSo3cUFmZ2pwAW', '2025-06-20 15:48:15', 0),
+(6, 'student@student', 'student', '$2y$10$zMwB/fhkMfkrBxma3fzR9Ogrq4FcK91VGFW9OKj5Fa2Hl541kPf5O', '2025-06-20 15:04:40', 0),
+(7, 'user@user', 'user1', '$2y$10$RZCBvCoBLhzyzBxvEzrLe.BPh6E2fN/nVCoAdEaRnn7Pqci5PpgbO', '2025-06-21 02:33:56', 0),
+(8, 'user2@user', 'user2', '$2y$10$fUdbtObH43AVbgSZ8/tJPOtlvQEd1WisH1uE.GZiXrCzQpR31DHG.', '2025-06-21 02:34:14', 0),
+(9, 'user3@user', 'user3', '$2y$10$HyAzBHVcKsAKeJokFR3gieV8wEWQCQVFoQwz3gZpJBceHrIm9rBSq', '2025-06-21 02:34:30', 0);
 
 --
 -- Indexes for dumped tables
@@ -685,7 +689,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `friendships`

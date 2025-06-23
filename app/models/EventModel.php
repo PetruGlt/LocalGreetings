@@ -57,6 +57,24 @@ class EventModel
         DatabaseService::runDML($sql, "i", $eventId);
     }
 
+    public static function updateEvent($eventId, $description, $eventTimeStart, $eventTimeEnd, $maxParticipants) {
+        DatabaseService::runDML(
+            "UPDATE events SET
+                description = ?,
+                event_time_start = ?,
+                event_time_end = ?,
+                max_participants = ?
+            WHERE id = ?
+            ",
+            "sssii",
+            $description,
+            $eventTimeStart,
+            $eventTimeEnd,
+            (int) $maxParticipants,
+            (int) $eventId
+        );
+    }
+
     public static function getEvents($filters) {
 
         $queryBuilder = "SELECT e.*, GROUP_CONCAT(CONCAT('#', t.name)) AS tags, sf.lat, sf.lon FROM events AS e
@@ -96,7 +114,7 @@ class EventModel
                 $conjunction = " WHERE " . substr_replace($conjunction, "", 0, 3);
         }
 
-        $queryBuilder .= $conjunction . " GROUP BY e.id";
+        $queryBuilder .= $conjunction . " GROUP BY e.id ORDER BY e.event_time_start DESC";
 
         $eventsData = DatabaseService::runSelect($queryBuilder, ...$bindParams);
         return $eventsData;
@@ -132,6 +150,17 @@ class EventModel
                 $userId
             );
         }
+    }
+
+    public static function getParticipantCount($eventId) {
+        $sql = "SELECT COUNT(DISTINCT user_id) AS cnt FROM event_participants WHERE event_id = ?";
+        return (int) DatabaseService::runSelect($sql, (int)$eventId)[0]['cnt'];
+    }
+
+    public static function isFull($eventId) {
+        $participantCount = self::getParticipantCount($eventId);
+        $event = self::findEventById($eventId)[0];
+        return $event['max_participants'] == $participantCount;
     }
 
     public static function cancel($eventId, $userId) {

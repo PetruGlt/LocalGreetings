@@ -54,6 +54,8 @@ class Event extends Controller
 
         $event = $event[0];
 
+        $hasStarted = new DateTime($event['event_time_start']) <= new DateTime();
+
         $fieldId = $event['field_id'];
         $tags = DatabaseService::runSelect(
             "SELECT t.name 
@@ -69,11 +71,50 @@ class Event extends Controller
         $creator = DatabaseService::runSelect("SELECT username FROM users WHERE id = ? LIMIT 1", $event['creator_id'])[0];
         $event['creator_username'] = $creator['username'] ?? 'Necunoscut';
 
+        $errorMessage = "";
+        if(isset($_SESSION['errorMessage'])) {
+            $errorMessage = $_SESSION['errorMessage'];
+            unset($_SESSION['errorMessage']);
+        }
+
         $this->view("event/viewEvent", [
             "event" => $event,
             "fieldId" => $fieldId,
             "eventTags" => $tags,
             "isParticipant" => EventModel::isParticipant($eventId, $_SESSION['user_id']),
+            "participants" => EventModel::getParticipants($eventId) ?? [],
+            'isOwnEvent' => $event['creator_id'] == $_SESSION['user_id'],
+            'errorMessage' => $errorMessage,
+            'hasStarted' => $hasStarted
+        ]);
+    }
+
+    public function editEvent($eventId) {
+        $event = EventModel::findEventById($eventId);
+        
+        if (empty($event)) {
+            $_SESSION['errorMessage'] = "Evenimentul nu a fost găsit.";
+            header("Location: /LocalGreetings/public/home/mainPage");
+            exit;
+        }
+
+        $event = $event[0];
+
+        $fieldId = $event['field_id'];
+        $tags = DatabaseService::runSelect(
+            "SELECT t.name 
+             FROM event_tags et
+             JOIN tags t ON et.tag_id = t.id
+             WHERE et.event_id = ?", (int)$eventId
+            );
+        if(!empty($tags))
+            $tags = array_map(function ($tag) {
+                return $tag["name"];
+            }, $tags);
+        $this->view("event/editEvent", [
+            "event" => $event,
+            "fieldId" => $fieldId,
+            "eventTags" => $tags,
             "participants" => EventModel::getParticipants($eventId) ?? []
         ]);
     }
@@ -161,13 +202,32 @@ class Event extends Controller
             }
             EventModel::deleteEvent($eventId);
         }
-        $this->view('home/mainPage');
+        header("Location: /LocalGreetings/public/home/mainPage");
+        exit;
+    }
+
+    public function update($eventId) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $description = $_POST['description'];
+            $eventTimeStart = $_POST['event_time_start'];
+            $eventTimeEnd = $_POST['event_time_end'];
+            $maxParticipants = $_POST['max_participants'];
+
+            EventModel::updateEvent($eventId, $description, $eventTimeStart, $eventTimeEnd, $maxParticipants);
+        }
+        header("Location: /LocalGreetings/public/event/editEvent/" . $eventId);
+        exit;
     }
 
     public function participate($eventId) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            EventModel::participate($eventId, $_SESSION['user_id']);
-            echo "Success";
+            if(EventModel::isFull($eventId)) {
+                $_SESSION['errorMessage'] = 'Evenimentul e plin!';
+                echo "Full";
+            } else {
+                EventModel::participate($eventId, $_SESSION['user_id']);
+                echo "Success";
+            }
         }
     }
 
