@@ -11,7 +11,4 @@ window.onclick = function (event) {
   if (event.target == document.getElementById("eventModal")) {
     document.getElementById("eventModal").style.display = "none";
   }
-  if (event.target === this) {
-
-  }
 };

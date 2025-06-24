@@ -49,8 +49,12 @@
 
     <h1>Toti utilizatorii</h1>
     <form method="get" action="<?= Config::get('APP_URL'); ?>/social/index">
-        <input name="username" type="text" value="<?= $username ?>"/>
-        <button type="submit">Filtreaza</button>
+        <div class="filter-header">
+        <div class="filter-element">
+            <input name="username" type="text" value="<?= $username ?>"/>
+            <button type="submit" style="background-color:rgb(11, 120, 223); color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px;cursor: pointer;">Filtreaza</button>
+        </div>
+        </div>
     </form>
     <ul class="user-list">
         <?php foreach ($allUsers as $user): ?>
@@ -64,7 +68,6 @@
     </ul>
 
     <a href="<?= Config::get('APP_URL'); ?>/social/pendingRequests" sytle="text-decoration: none;">→ Vezi cereri de prietenie</a>
-    <a href="/LocalGreetings/public/rss/send" class="btn btn-primary">Trimite fluxul RSS pe email</a>
 
 </div>
 

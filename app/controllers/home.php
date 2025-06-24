@@ -42,12 +42,12 @@ class Home extends Controller
         $newsModel = $this->model('News');
 
         $sursa1 = $newsModel->fetchNews('https://www.digi24.ro/rss/stiri/sport');
-        $sursa2 = $newsModel->fetchNews('https://rss.stirileprotv.ro/stiri/sport');
+        // $sursa2 = $newsModel->fetchNews('https://rss.stirileprotv.ro/stiri/sport');
         $sursa3 = $newsModel->fetchNews('https://observatornews.ro/rss/sport/');
     
         $this->view('home/news', [
             'Digi24'=>$sursa1,
-            'ProTV'=>$sursa2, 
+            // 'ProTV'=>$sursa2, 
             'Observator'=>$sursa3
         ]);
     

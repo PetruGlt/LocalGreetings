@@ -129,7 +129,17 @@ class User
             ",  $userId, $userId, $userId, $userId);
     }
 
-    public function sendRequest($userId, $friendId){
+    public function sendRequest($userId, $friendId){        
+        $existing = DatabaseService::runSelect("
+        SELECT id FROM friendships
+        WHERE (user_id = ? AND friend_id = ?) 
+        OR (user_id = ? AND friend_id = ?)"
+        , $userId, $friendId, $friendId, $userId);
+
+        if (!empty($existing)) {
+            return false; 
+        }
+
         return DatabaseService::runDML("
             INSERT INTO friendships (user_id, friend_id) VALUES (? , ?)", "ii", $userId, $friendId  
         );
