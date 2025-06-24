@@ -65,7 +65,7 @@
             <?php endif; ?>
         <?php else: ?>
             <button class="button-success">
-                <a href="<?= Config::get("APP_URL"); ?>/event/editEvent/<?= $event['id'] ?>">
+                <a style="text-decoration: none; color: black;" href="<?= Config::get("APP_URL"); ?>/event/editEvent/<?= $event['id'] ?>">
                     Editeaza evenimentul
                 </a>
             </button>

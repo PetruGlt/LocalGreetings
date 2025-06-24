@@ -27,21 +27,6 @@ if (isset($_SESSION['errorMessage'])) {
     <title>Sports Meetup - Find Courts</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="<?= Config::get("APP_URL"); ?>/css/MainStyle.css">
-    <style>
-        .error-notification {
-            background-color: #f44336;
-            color: white;
-            padding: 15px 20px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            font-family: Arial, sans-serif;
-            min-width: 250px;
-            opacity: 0.95;
-            transition: opacity 0.3s ease;
-        }
-        
-    </style>
     <script src="<?= Config::get("APP_URL"); ?>/js/eventList.js" defer></script>
 
 </head>
@@ -160,6 +145,10 @@ if (isset($_SESSION['errorMessage'])) {
             </div>
             <ul id="event-list"></ul>
         </div>
+    </div>
+    
+    <div class="container">
+            <?php include_once __DIR__ . '/../partials/rssForm.php'; ?>
     </div>
 </div>
 </body>

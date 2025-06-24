@@ -23,7 +23,7 @@
         <input type="datetime-local" name="event_time_end" required><br><br>
 
         <label>Descriere:</label><br>
-        <textarea name="description" rows="2" required maxlength="100"></textarea><br><br>
+        <textarea name="description" rows="2" required maxlength="300"></textarea><br><br>
 
       <label>Numar maxim participanti:</label><br>
       <input type="number" name="max_participants" min="2" required><br><br>

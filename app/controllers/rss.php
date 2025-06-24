@@ -11,6 +11,9 @@ class rss extends Controller {
         
         $conditions = [];
         
+        if (isset($_POST['fieldId'])) $fieldId = $_POST['fieldId'];
+        if (isset($_POST['tagName'])) $tagName = $_POST['tagName'];
+        
         if ($tagName != null) {
             $sql .= "
                 JOIN event_tags et ON e.id = et.event_id
@@ -65,5 +68,36 @@ class rss extends Controller {
 
         require_once '../app/models/RSSMailer.php';
         RSSMailer::send( $_SESSION['email'], "http://localhost/LocalGreetings/public/rss/feed");
+    }
+
+    public function sendFiltered() {
+        if (!isset($_SESSION['email'])) {
+            header("Location: /LocalGreetings/public/login");
+            exit;
+        }
+
+        $fieldId = $_POST['fieldId'] ?? null;
+        $tagName = $_POST['tagName'] ?? null;
+        
+        $rssUrl = "http://localhost/LocalGreetings/public/rss/feed/";
+        
+        if($fieldId != null){
+            $rssUrl = $rssUrl . $fieldId;
+            if($tagName != null) $rssUrl = $rssUrl . "/" . $tagName;
+        }
+        else if($tagName != null){
+            $rssUrl = $rssUrl . "null/". $tagName;
+        }
+
+        require_once '../app/models/RSSMailer.php';
+
+        try{ 
+            RSSMailer::send($_SESSION['email'], $rssUrl);
+            $_SESSION['errorMessage'] = "Email trimis cu succes la ". $_SESSION['email'];
+        } catch (Exception $e){
+            echo "Eroare la trimitere mail: ";
+        }
+        header('Location: /LocalGreetings/public/home/mainPage');
+        exit;
     }
 }
