@@ -1,4 +1,4 @@
-# 🏟️ SportIS — Local Greetings
+# SportIS — Local Greetings
 
 [![PHP Version](https://img.shields.io/badge/PHP-8.2%2B-777BB4?style=flat&logo=php&logoColor=white)](https://www.php.net/)
 [![MySQL](https://img.shields.io/badge/MySQL%20%2F%20MariaDB-10.11%2B-4479A1?style=flat&logo=mariadb&logoColor=white)](https://mariadb.org/)
@@ -11,18 +11,24 @@
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 
-- [About the Project](#-about-the-project)
-- [Key Features](#-key-features)
-- [Architecture & Tech Stack](#-architecture--tech-stack)
-- [Demo Accounts](#-demo-accounts)
-- [Quick Start with Docker](#-quick-start-with-docker-recommended)
-- [Manual Setup (XAMPP / LAMP)](#-manual-setup-xampp--lamp--wamp)
-- [Cloud Deployment Guide](#-cloud-deployment-guide)
-- [Configuration & Environment Variables](#-configuration--environment-variables)
-- [Project Structure](#-project-structure)
-- [Documentation & Media](#-documentation--media)
+- [Live Demo](#live-demo)
+- [About the Project](#about-the-project)
+- [Key Features](#key-features)
+- [Demo Accounts](#demo-accounts)
+- [Launching the app using Docker](#launching-the-app-using-docker)
+- [Configuration & Environment Variables](#configuration--environment-variables)
+- [Project Structure](#project-structure)
+- [Documentation & Media](#documentation--media)
+
+---
+
+## Live Demo
+
+The application is deployed and live at: **[https://localgreetings.onrender.com](https://localgreetings.onrender.com)**
+
+> **Disclaimer:** The application is hosted on a free cloud container instance (Render). If the service has been inactive, please allow approximately **30–50 seconds** for the initial spin-up on first load. Subsequent requests and navigation will be instantaneous.
 
 ---
 
@@ -37,7 +43,7 @@
 
 ---
 
-## ⚡ Key Features
+## Key Features
 
 ### 1. Interactive Court Finder (Leaflet.js + OpenStreetMap)
 - Interactive map centered on Iași with custom markers for every sports ground.
@@ -70,47 +76,6 @@
 
 ---
 
-## 🏛️ Architecture & Tech Stack
-
-```
-                       +-------------------+
-                       |    Web Browser    |
-                       +---------+---------+
-                                 | HTTP / JSON
-                                 v
-                       +-------------------+
-                       |  public/index.php | (Front Controller)
-                       +---------+---------+
-                                 |
-                        URL Routing (App.php)
-                                 |
-              +------------------+------------------+
-              |                                     |
-              v                                     v
-     +-----------------+                   +-----------------+
-     |   Controllers   |                   |   Views / UI    |
-     | (Login, Event,  | <--- Data Flow ---> (HTML5, CSS3,   |
-     |  Social, Admin) |                   |  Leaflet.js)    |
-     +--------+--------+                   +-----------------+
-              |
-              v
-     +-----------------+
-     |  Models / Logic |
-     | (User, Event,   |
-     |  News, Tag)     |
-     +--------+--------+
-              |
-              v
-     +-----------------+
-     | DatabaseService | (Prepared Statements / mysqli)
-     +--------+--------+
-              |
-              v
-     +-----------------+
-     | MySQL / MariaDB | (sportis schema)
-     +-----------------+
-```
-
 - **Backend**: PHP 8.2 (Vanilla MVC, zero bloated third-party frameworks).
 - **Database**: MySQL 8.0 / MariaDB 10.11 with `utf8mb4` encoding.
 - **Security**:
@@ -123,7 +88,7 @@
 
 ---
 
-## 🔑 Demo Accounts
+## Demo Accounts
 
 The database comes pre-seeded with test accounts ready for demonstration:
 
@@ -235,7 +200,7 @@ LocalGreetings/
 
 ---
 
-## 📚 Documentation & Media
+## Documentation & Media
 
 - 📐 **Architecture Diagram**: [C4 Diagram PDF Document](./public/docs/C4_SPORTIS.pdf)
 - 📖 **Functional Specifications (EN)**: Accessible at `/home/viewDocEn` or [View English Doc](./app/views/docs/descriptionEn.php)
