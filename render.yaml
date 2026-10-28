@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: sportis
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: MYSQL_SERVER
+        sync: false
+      - key: MYSQL_PORT
+        value: "3306"
+      - key: MYSQL_DB
+        sync: false
+      - key: MYSQL_USER
+        sync: false
+      - key: MYSQL_PASSWORD
+        sync: false
