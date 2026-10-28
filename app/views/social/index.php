@@ -18,7 +18,7 @@
         <?php if (!empty($friends)): ?>
             <?php foreach ($friends as $friend): ?>
                 <li class="user-card">
-                    <a style="text-decoration: none; color: #1e1e2f;" href="../home/viewProfile/<?= htmlspecialchars($friend['id']) ?>"><?= htmlspecialchars($friend['username']) ?></a>
+                    <a style="text-decoration: none; color: #1e1e2f;" href="<?= Config::get('APP_URL'); ?>/home/viewProfile/<?= htmlspecialchars($friend['id']) ?>"><?= htmlspecialchars($friend['username']) ?></a>
                     <form action="<?= Config::get('APP_URL'); ?>/social/deleteFriend/<?= $friend['id'] ?>" method="post">
                         <button type="submit" style="background-color: red;">Sterge prieten</button>
                     </form>
@@ -37,7 +37,7 @@
     <ul class="user-list">
         <?php foreach ($randomUsers as $user): ?>
             <li class="user-card">
-                <a style="text-decoration: none; color: #1e1e2f;" href="../home/viewProfile/<?= htmlspecialchars($user['id']) ?>"><?= htmlspecialchars($user['username']) ?></a>
+                <a style="text-decoration: none; color: #1e1e2f;" href="<?= Config::get('APP_URL'); ?>/home/viewProfile/<?= htmlspecialchars($user['id']) ?>"><?= htmlspecialchars($user['username']) ?></a>
                 <form action="<?= Config::get('APP_URL'); ?>/social/sendRequest/<?= $user['id'] ?>" method="post">
                     <button type="submit">Adauga prieten</button>
                 </form>
@@ -59,7 +59,7 @@
     <ul class="user-list">
         <?php foreach ($allUsers as $user): ?>
             <li class="user-card">
-                <a style="text-decoration: none; color: #1e1e2f;" href="../home/viewProfile/<?= htmlspecialchars($user['id']) ?>"><?= htmlspecialchars($user['username']) ?></a>
+                <a style="text-decoration: none; color: #1e1e2f;" href="<?= Config::get('APP_URL'); ?>/home/viewProfile/<?= htmlspecialchars($user['id']) ?>"><?= htmlspecialchars($user['username']) ?></a>
                 <form action="<?= Config::get('APP_URL'); ?>/social/sendRequest/<?= $user['id'] ?>" method="post">
                     <button type="submit">Adauga prieten</button>
                 </form>
@@ -67,7 +67,7 @@
         <?php endforeach; ?>
     </ul>
 
-    <a href="<?= Config::get('APP_URL'); ?>/social/pendingRequests" sytle="text-decoration: none;">→ Vezi cereri de prietenie</a>
+    <a href="<?= Config::get('APP_URL'); ?>/social/pendingRequests" style="text-decoration: none;">→ Vezi cereri de prietenie</a>
 
 </div>
 

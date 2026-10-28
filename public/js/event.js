@@ -1,9 +1,11 @@
 function participate(eventId) {
-    makeRequest(`/LocalGreetings/public/event/participate/${eventId}`, true)
+    const baseUrl = window.APP_URL || '';
+    makeRequest(`${baseUrl}/event/participate/${eventId}`, true)
 }
 
 function cancelParticipation(eventId) {
-    makeRequest(`/LocalGreetings/public/event/cancel/${eventId}`, false)
+    const baseUrl = window.APP_URL || '';
+    makeRequest(`${baseUrl}/event/cancel/${eventId}`, false)
 }
 
 function makeRequest(url, toggle) {

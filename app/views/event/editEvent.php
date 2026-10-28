@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evenimente</title>
     <link rel="stylesheet" href="<?php echo Config::get('APP_URL'); ?>/css/MainStyle.css">
+    <script>window.APP_URL = "<?= rtrim(Config::get('APP_URL', ''), '/'); ?>";</script>
     <script src="<?= Config::get("APP_URL"); ?>/js/event.js" defer></script>
      <style>
         .button-success {

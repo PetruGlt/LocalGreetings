@@ -27,8 +27,8 @@ if (isset($_SESSION['errorMessage'])) {
     <title>Sports Meetup - Find Courts</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="<?= Config::get("APP_URL"); ?>/css/MainStyle.css">
+    <script>window.APP_URL = "<?= rtrim(Config::get('APP_URL', ''), '/'); ?>";</script>
     <script src="<?= Config::get("APP_URL"); ?>/js/eventList.js" defer></script>
-
 </head>
 <!-- MODAL FORMULAR addEvent -->
  <?php include_once __DIR__ . '/../partials/eventModal.php'; ?>
@@ -87,7 +87,7 @@ if (isset($_SESSION['errorMessage'])) {
                     ${!!location.sport ? "<br>Name: " + location.sport : ""}
                     ${!!location.surface ? "<br>Name: " + location.surface : ""}
                     <br><br>
-                    <button onclick="window.location.href='/LocalGreetings/public/event/viewField/${location.id}'"
+                    <button onclick="window.location.href='${window.APP_URL || ''}/event/viewField/${location.id}'"
                         style="border-radius: 10px; opacity: 80%; background-color:rgb(46, 206, 218); color: white;"> Vizualizează Evenimente </button>
                     <button style="border-radius: 10px; opacity: 80%; background-color:rgb(64, 172, 67); color: white;" onclick="openEventModal(${location.id})">Adauga Eveniment</button>
                 `);

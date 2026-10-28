@@ -22,7 +22,8 @@ function getEvents(form) {
     }
     const xmlhttp = new XMLHttpRequest();
     xmlhttp.onload = () => listEvents(JSON.parse(xmlhttp.responseText))
-    xmlhttp.open("GET", `/LocalGreetings/public/event/getEvents?${filters}`)
+    const baseUrl = window.APP_URL || '';
+    xmlhttp.open("GET", `${baseUrl}/event/getEvents?${filters}`)
     xmlhttp.send()
 }
 
@@ -52,7 +53,8 @@ function createDOMItem(event) {
     const viewEventButton = document.createElement('button')
     viewEventButton.innerText = 'View Event'
     viewEventButton.addEventListener('click', () => {
-        window.location.href = `/LocalGreetings/public/event/viewEvent/${event.id}`
+        const baseUrl = window.APP_URL || '';
+        window.location.href = `${baseUrl}/event/viewEvent/${event.id}`
     })
     listItem.appendChild(viewEventButton)
 

@@ -1,7 +1,7 @@
 <h2>Generează și trimite fluxul RSS filtrat</h2>
 
 
-<form method="post" action="/LocalGreetings/public/rss/feed" target="_blank">
+<form method="post" action="<?= Config::get('APP_URL'); ?>/rss/feed" target="_blank">
     <div class="filter-header">
         <div class="filter-element">
             <label for="fieldIdMail">ID Teren:</label>
@@ -21,7 +21,7 @@
 <br>
 
 
-<form method="post" action="/LocalGreetings/public/rss/sendFiltered">
+<form method="post" action="<?= Config::get('APP_URL'); ?>/rss/sendFiltered">
     <div class="filter-header">
         <div class="filter-element">
             <label for="fieldIdMail">ID Teren:</label>

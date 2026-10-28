@@ -5,8 +5,7 @@ class social extends Controller {
 
     public function __construct() {
         if(!$this->isAuthenticated()) {
-            header("Location: /LocalGreetings/public/login/index");
-            exit;
+            $this->redirect('/login/index');
         }
         $this->userModel = $this->model('User');
     }
@@ -36,12 +35,12 @@ class social extends Controller {
     public function sendRequest($friendId) {
         $userId = $_SESSION['user_id'];
         $this->userModel->sendRequest($userId, $friendId);
-        header("Location: ../../social/index");
+        $this->redirect('/social/index');
     }
 
     public function acceptRequest($requestId) {
         $this->userModel->acceptRequest($requestId);
-        header("Location: ../../social/index");
+        $this->redirect('/social/index');
     }
 
     public function pendingRequests() {
@@ -53,6 +52,6 @@ class social extends Controller {
     public function deleteFriend($friendId) {
         $userId = $_SESSION['user_id'];
         $this->userModel->deleteFriend($userId, $friendId);
-        header("Location: ../../social/index");
+        $this->redirect('/social/index');
     }
 }

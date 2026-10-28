@@ -6,9 +6,12 @@ class Home extends Controller
 {
     private $userModel;
     public function __construct() {
-        if(!$this->isAuthenticated()) {
-            header("Location: /LocalGreetings/public/login/index");
-            exit;
+        $url = isset($_GET['url']) ? explode('/', filter_var(rtrim($_GET['url'], '/'), FILTER_SANITIZE_URL)) : [];
+        $action = $url[1] ?? '';
+        if (!in_array($action, ['viewDocEn', 'viewDocRo'])) {
+            if (!$this->isAuthenticated()) {
+                $this->redirect('/login/index');
+            }
         }
         $this->userModel = $this->model('User');
     }
@@ -19,22 +22,23 @@ class Home extends Controller
         
         $this->view('home/hello', ['name'=> $user->name]);
     }
-    
 
     public function index(){
         if($this->isAuthenticated())
             $this->view('home/mainPage');
         else {
-            header('Location: ../login/loginPage');
-            exit;
+            $this->redirect('/login/index');
         }
+    }
+
+    public function mainPage(){
+        $this->index();
     }
     
     public function logout(){
         session_unset();
         session_destroy();
-        header('Location: ../login/loginPage');
-        exit;
+        $this->redirect('/login/index');
     }
 
     public function news(){

@@ -12,7 +12,15 @@ class Config
         }
 
         if (!file_exists($file)) {
-            throw new RuntimeException("Config file not found: $file");
+            // Check root directory for .env as fallback
+            $rootFile = dirname(__DIR__, 2) . '/.env';
+            if (file_exists($rootFile)) {
+                $file = $rootFile;
+            } else {
+                // If neither exists, rely on environment variables (Docker, Cloud platforms)
+                self::$loaded = true;
+                return;
+            }
         }
 
         $lines = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -35,11 +43,15 @@ class Config
                 // Remove surrounding quotes
                 $value = preg_replace('/^["\'](.*)["\']$/', '$1', $value);
 
-                self::$data[$key] = $value;
-
-                // Also store in $_ENV and putenv for global use
-                $_ENV[$key] = $value;
-                putenv("$key=$value");
+                // Do not override existing system/container environment variables
+                $existingEnv = $_ENV[$key] ?? getenv($key);
+                if ($existingEnv === false || $existingEnv === null || $existingEnv === '') {
+                    self::$data[$key] = $value;
+                    $_ENV[$key] = $value;
+                    putenv("$key=$value");
+                } else {
+                    self::$data[$key] = $existingEnv;
+                }
             }
         }
 
@@ -48,6 +60,29 @@ class Config
 
     public static function get(string $key, $default = null)
     {
-        return self::$data[$key] ?? $_ENV[$key] ?? getenv($key) ?: $default;
+        if (!self::$loaded) {
+            self::load();
+        }
+
+        $val = $_ENV[$key] ?? getenv($key) ?? self::$data[$key] ?? null;
+        if ($val !== false && $val !== null && $val !== '') {
+            return $val;
+        }
+
+        if ($key === 'APP_URL') {
+            if (isset($_SERVER['HTTP_HOST'])) {
+                $scheme = (
+                    (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ||
+                    (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
+                ) ? 'https' : 'http';
+                $host = $_SERVER['HTTP_HOST'];
+                $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+                $base = ($scriptDir === '/' || $scriptDir === '.') ? '' : $scriptDir;
+                return rtrim($scheme . '://' . $host . $base, '/');
+            }
+            return $default ?? '';
+        }
+
+        return $default;
     }
 }

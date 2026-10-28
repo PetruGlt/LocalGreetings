@@ -1,1 +1,6 @@
-/app/.env
+.env
+app/.env
+*.log
+.DS_Store
+*Connection*.txt
+*connection*.txt

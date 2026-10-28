@@ -59,7 +59,7 @@
         <?php foreach ($requests as $req): ?>
             <div class="request-card">
                 <span><?= htmlspecialchars($req['username']) ?></span>
-                <a href="/LocalGreetings/public/social/acceptRequest/<?= $req['id'] ?>">Accepta</a>
+                <a href="<?= Config::get('APP_URL'); ?>/social/acceptRequest/<?= $req['id'] ?>">Accepta</a>
             </div>
         <?php endforeach; ?>
     <?php else: ?>

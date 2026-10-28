@@ -22,9 +22,9 @@
             <?php if(!empty($events)): ?>
                 <?php foreach ($events as $event): ?>
                     <li class="event-card">
-                        <a style="text-decoration: none; color: #1e1e2f;" href="../../event/viewEvent/<?= $event['id'] ?>"><?= htmlspecialchars($event['name']); ?></a>
+                        <a style="text-decoration: none; color: #1e1e2f;" href="<?= Config::get('APP_URL'); ?>/event/viewEvent/<?= $event['id'] ?>"><?= htmlspecialchars($event['name']); ?></a>
                         <p><?= htmlspecialchars($event['event_time_start']); ?> : <?= htmlspecialchars($event['event_time_end']); ?> 
-                        <p><a style="text-decoration: none; color: #1e1e2f;" href="../../event/viewField/<?= $event['field_id']?>"><?= htmlspecialchars($event['field_id']); ?></a></p>
+                        <p><a style="text-decoration: none; color: #1e1e2f;" href="<?= Config::get('APP_URL'); ?>/event/viewField/<?= $event['field_id']?>"><?= htmlspecialchars($event['field_id']); ?></a></p>
                 </li>
                 <?php endforeach; ?>   
             <?php else: ?>
@@ -37,9 +37,9 @@
             <?php if(!empty($createdEvents)): ?>
                 <?php foreach ($createdEvents as $event): ?>
                     <li class="event-card">
-                        <a style="text-decoration: none; color: #1e1e2f;" href="../../event/viewEvent/<?= $event['id'] ?>"><?= htmlspecialchars($event['name']); ?></a>
+                        <a style="text-decoration: none; color: #1e1e2f;" href="<?= Config::get('APP_URL'); ?>/event/viewEvent/<?= $event['id'] ?>"><?= htmlspecialchars($event['name']); ?></a>
                         <p><?= htmlspecialchars($event['event_time_start']); ?> : <?= htmlspecialchars($event['event_time_end']); ?> 
-                        <p><a style="text-decoration: none; color: #1e1e2f;" href="../../event/viewField/<?= $event['field_id']?>"><?= htmlspecialchars($event['field_id']); ?></a></p>
+                        <p><a style="text-decoration: none; color: #1e1e2f;" href="<?= Config::get('APP_URL'); ?>/event/viewField/<?= $event['field_id']?>"><?= htmlspecialchars($event['field_id']); ?></a></p>
                         <?php if ($user['id'] == $_SESSION['user_id']): ?>
                             <form action="<?= Config::get('APP_URL'); ?>/event/deleteEvent/<?= $event['id'] ?>" method="post">
                                 <button type="submit" style="background-color: red;">Șterge eveniment</button>
@@ -64,7 +64,7 @@
                         $days = $interval->days;
                     ?>
                     <li class="user-card">
-                        <a style="text-decoration: none; color: #1e1e2f;" href="../../home/viewProfile/<?= $friend['id'] ?>"><?= $friend['username']; ?></a>
+                        <a style="text-decoration: none; color: #1e1e2f;" href="<?= Config::get('APP_URL'); ?>/home/viewProfile/<?= $friend['id'] ?>"><?= $friend['username']; ?></a>
                         <p>Prieteni de: <?= $days ?> zile ( din <?= $createdDate->format('Y-m-d') ?>)</p>
                     </li>
                 <?php endforeach; ?>

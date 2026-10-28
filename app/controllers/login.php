@@ -29,9 +29,7 @@ class Login extends Controller
                 $_SESSION['email'] = $user['email'];
                 $_SESSION['is_admin'] = $user['is_admin'] == 1;
                 
-                // $this->view('home/mainPage');
-                header('Location: ../home/mainPage');
-                exit;
+                $this->redirect('/home/mainPage');
             } else {
                 $errorMessage = "Date de autentificare incorecte. Vă rugăm să încercați din nou.";
                 $this->view('login/loginPage', ['errorMessage' => $errorMessage]);
@@ -66,9 +64,7 @@ class Login extends Controller
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['email'] = $user['email'];
                 
-                // $this->view('home/mainPage');
-                header('Location: ../login/loginPage');
-                exit;
+                $this->redirect('/login/index');
             } else {
                 $errorMessage = "Username sau email deja inregistrat. Va rugam sa incercati din nou.";
                 $this->view('login/registerPage', ['errorMessage' => $errorMessage]);

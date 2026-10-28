@@ -9,8 +9,7 @@ class Event extends Controller
 
     public function __construct() {
         if(!$this->isAuthenticated()) {
-            header("Location: /LocalGreetings/public/login/index");
-            exit;
+            $this->redirect('/login/index');
         }
         $this->tagModel = $this->model('Tag');
         $this->userModel = $this->model('User');
@@ -21,9 +20,7 @@ class Event extends Controller
         $events = EventModel::findEventsByFieldId($fieldId);
         if (empty($events)) {
             $_SESSION['errorMessage'] = "Nu exista evenimente pentru acest teren.";
-            header("Location: /LocalGreetings/public/home/mainPage");
-            
-            exit;
+            $this->redirect('/home/mainPage');
         }
 
         $tags = $this->tagModel->getTagsForField($fieldId);
@@ -50,8 +47,7 @@ class Event extends Controller
         
         if (empty($event)) {
             $_SESSION['errorMessage'] = "Evenimentul nu a fost găsit.";
-            header("Location: /LocalGreetings/public/home/mainPage");
-            exit;
+            $this->redirect('/home/mainPage');
         }
 
         $event = $event[0];
@@ -91,8 +87,7 @@ class Event extends Controller
         
         if (empty($event)) {
             $_SESSION['errorMessage'] = "Evenimentul nu a fost găsit.";
-            header("Location: /LocalGreetings/public/home/mainPage");
-            exit;
+            $this->redirect('/home/mainPage');
         }
 
         $event = $event[0];
@@ -134,8 +129,7 @@ class Event extends Controller
             if ($Hours > 6) {
                 $errorMessage = "Durata evenimentului nu poate depasi 6 ore.";
                 $_SESSION['errorMessage'] = $errorMessage;
-                header("Location: ../home/mainPage"); 
-                exit;
+                $this->redirect('/home/mainPage');
             }
 
             $success = EventModel::registerEvent($name, $userId, $fieldId, $maxParticipants, $eventTimeStart, $eventTimeEnd, $description);
@@ -149,8 +143,7 @@ class Event extends Controller
                     }
                 }
                 
-                header("Location: ../home/mainPage"); 
-                exit;
+                $this->redirect('/home/mainPage');
             } else {
                 echo "Eroare la salvarea evenimentului!";
             }
@@ -193,8 +186,7 @@ class Event extends Controller
             }
             EventModel::deleteEvent($eventId);
         }
-        header("Location: /LocalGreetings/public/home/mainPage");
-        exit;
+        $this->redirect('/home/mainPage');
     }
 
     public function update($eventId) {
@@ -206,8 +198,7 @@ class Event extends Controller
 
             EventModel::updateEvent($eventId, $description, $eventTimeStart, $eventTimeEnd, $maxParticipants);
         }
-        header("Location: /LocalGreetings/public/event/editEvent/" . $eventId);
-        exit;
+        $this->redirect('/event/editEvent/' . $eventId);
     }
 
     public function participate($eventId) {

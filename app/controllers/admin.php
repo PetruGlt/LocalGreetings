@@ -9,8 +9,7 @@ class Admin extends Controller
 
     public function __construct() {
         if(!$this->isAdmin()) {
-            header("Location: /LocalGreetings/public/login/index");
-            exit;
+            $this->redirect('/login/index');
         }
         $this->userModel = $this->model('User');
         $this->tagModel = $this->model('Tag');
@@ -30,16 +29,14 @@ class Admin extends Controller
     public function ban($userId) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->userModel->ban($userId);
-            header("Location: /LocalGreetings/public/admin/users");
-            exit;
+            $this->redirect('/admin/users');
         }
     }
 
     public function unban($userId) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->userModel->unban($userId);
-            header("Location: /LocalGreetings/public/admin/users");
-            exit;
+            $this->redirect('/admin/users');
         }
     }
 
@@ -62,8 +59,7 @@ class Admin extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->tagModel->delete($tagId);
         }
-        header("Location: /LocalGreetings/public/admin/tags");
-        exit;
+        $this->redirect('/admin/tags');
     }
 
     public function events() {
@@ -93,7 +89,6 @@ class Admin extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             EventModel::deleteEvent($eventId);
         }
-        header("Location: /LocalGreetings/public/admin/events");
-        exit;
+        $this->redirect('/admin/events');
     }
 }

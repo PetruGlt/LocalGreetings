@@ -34,11 +34,13 @@ class rss extends Controller {
 
         $events = DatabaseService::runSelect($sql);
        
+        $appUrl = rtrim(Config::get('APP_URL', ''), '/');
+
         echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
         echo "<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">\n";
         echo "<channel>\n";
         echo "<title>Evenimente Sportive Locale</title>\n";
-        echo "<link>http://localhost/LocalGreetings/</link>\n";
+        echo "<link>" . htmlspecialchars($appUrl) . "/</link>\n";
         echo "<description>Flux RSS cu evenimentele urmatoare</description>\n";
         echo "<language>ro-ro</language>\n";
 
@@ -47,14 +49,14 @@ class rss extends Controller {
             foreach ($events as $event) {
             echo "<item>\n";
             echo "<title>" . htmlspecialchars($event['name']) . "</title>\n";
-            echo "<link>http://localhost/LocalGreetings/public/event/viewField/" . $event['field_id'] . "</link>\n";
-            echo "<description>" . $event['description'] . "</description>\n";
+            echo "<link>" . htmlspecialchars($appUrl . "/event/viewField/" . $event['field_id']) . "</link>\n";
+            echo "<description>" . htmlspecialchars($event['description'] ?? '') . "</description>\n";
             echo "<pubDate>" . date(DATE_RSS, strtotime($event['event_time_start'])) . "</pubDate>\n";
-            echo "<guid>http://localhost/LocalGreetings/public/event/viewEvent/" . $event['id'] . "</guid>\n";
+            echo "<guid>" . htmlspecialchars($appUrl . "/event/viewEvent/" . $event['id']) . "</guid>\n";
             echo "</item>\n";
             }
         }
-        else echo "NO EVENTS FOUND\n";
+        else echo "<item><title>NO EVENTS FOUND</title><description>Nu exista evenimente</description></item>\n";
 
         echo "</channel>\n";
         echo "</rss>\n";
@@ -62,24 +64,22 @@ class rss extends Controller {
 
      public function send() {
         if (!isset($_SESSION['email'])) {
-            header("Location: /LocalGreetings/public/login");
-            exit;
+            $this->redirect('/login/index');
         }
 
-        require_once '../app/models/RSSMailer.php';
-        RSSMailer::send( $_SESSION['email'], "http://localhost/LocalGreetings/public/rss/feed");
+        require_once __DIR__ . '/../models/RSSMailer.php';
+        RSSMailer::send( $_SESSION['email'], rtrim(Config::get('APP_URL', ''), '/') . "/rss/feed");
     }
 
     public function sendFiltered() {
         if (!isset($_SESSION['email'])) {
-            header("Location: /LocalGreetings/public/login");
-            exit;
+            $this->redirect('/login/index');
         }
 
         $fieldId = $_POST['fieldId'] ?? null;
         $tagName = $_POST['tagName'] ?? null;
         
-        $rssUrl = "http://localhost/LocalGreetings/public/rss/feed/";
+        $rssUrl = rtrim(Config::get('APP_URL', ''), '/') . "/rss/feed/";
         
         if($fieldId != null){
             $rssUrl = $rssUrl . $fieldId;
@@ -89,15 +89,14 @@ class rss extends Controller {
             $rssUrl = $rssUrl . "null/". $tagName;
         }
 
-        require_once '../app/models/RSSMailer.php';
+        require_once __DIR__ . '/../models/RSSMailer.php';
 
         try{ 
             RSSMailer::send($_SESSION['email'], $rssUrl);
             $_SESSION['errorMessage'] = "Email trimis cu succes la ". $_SESSION['email'];
         } catch (Exception $e){
-            echo "Eroare la trimitere mail: ";
+            $_SESSION['errorMessage'] = "Eroare la trimitere mail: " . $e->getMessage();
         }
-        header('Location: /LocalGreetings/public/home/mainPage');
-        exit;
+        $this->redirect('/home/mainPage');
     }
 }
